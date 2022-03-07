@@ -14,19 +14,19 @@ model Employee {
   firstName      String
   lastName       String
   email          String    @unique
-  authority      Authority @default(MODERATOR)
   isActive       Boolean   @default(true)
   ipVerification Boolean   @default(true)
   profileImg     String?
   createdAt      DateTime  @default(now())
   createdBy      String
+  authority      Authority @default(MODERATOR)
 }
 
 enum Authority {
   ROOT
   ADMIN
+  MODERATOR
   IT_SUPPORT
   DATA_SUPPORT
   CLIENT_SUPPORT
-  MODERATOR
 }
