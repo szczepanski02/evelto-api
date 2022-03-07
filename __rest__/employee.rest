@@ -1,0 +1,15 @@
+@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+
+POST http://localhost:3000/employee/create HTTP/1.1
+content-type: application/json
+
+{
+    "username": "rszczepanski",
+    "password": "admin",
+    "email": "r.szczepanski02@gmail.com",
+    "firstName": "Radosław",
+    "lastName": "Szczepański"
+}
+
+###
+GET http://localhost:3000/employee/1 HTTP/1.1
