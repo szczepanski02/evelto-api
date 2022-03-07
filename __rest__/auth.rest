@@ -1,10 +1,14 @@
-@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJyc3pjemVwYW5za2kwMiIsImZpcnN0TmFtZSI6IkFkbWluIiwibGFzdE5hbWUiOiJTemN6ZXBhxYRza2kiLCJhdXRob3JpdHkiOiJNT0RFUkFUT1IiLCJpYXQiOjE2NDY2OTAzNzEsImV4cCI6MTY0NjY5MTI3MX0.3hhzaT7z5TUmz2G_zd83p72drJwpWvu1DiMELlSBNBY
 
 // AUTH controller
-POST http://localhost:3000/auth/signIn HTTP/1.1
+POST http://localhost:3000/auth/signin HTTP/1.1
 content-type: application/json
 
 {
-    "username": "rszczepanski",
+    "username": "rszczepanski02",
     "password": "admin"
 }
+
+###
+GET http://localhost:3000/auth/authorize HTTP/1.1
+Authorization: Bearer {{access_token}}

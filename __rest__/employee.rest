@@ -1,15 +1,41 @@
-@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJyc3pjemVwYW5za2kwMiIsImZpcnN0TmFtZSI6IkFkbWluIiwibGFzdE5hbWUiOiJTemN6ZXBhxYRza2kiLCJhdXRob3JpdHkiOiJNT0RFUkFUT1IiLCJpYXQiOjE2NDY2OTAzNzEsImV4cCI6MTY0NjY5MTI3MX0.3hhzaT7z5TUmz2G_zd83p72drJwpWvu1DiMELlSBNBY
 
-POST http://localhost:3000/employee/create HTTP/1.1
+POST http://localhost:3000/employee HTTP/1.1
+Authorization: Bearer {{access_token}}
 content-type: application/json
 
 {
-    "username": "rszczepanski",
+    "username": "admin",
     "password": "admin",
-    "email": "r.szczepanski02@gmail.com",
-    "firstName": "Radosław",
-    "lastName": "Szczepański"
+    "email": "admin@gmail.com",
+    "firstName": "Admin",
+    "lastName": "User"
 }
 
 ###
 GET http://localhost:3000/employee/1 HTTP/1.1
+Authorization: Bearer {{access_token}}
+
+###
+// queries: currentPage, itemsPerPage, filterBy, filterValue
+GET http://localhost:3000/employee HTTP/1.1
+Authorization: Bearer {{access_token}}
+
+###
+DELETE http://localhost:3000/employee/10 HTTP/1.1
+Authorization: Bearer {{access_token}}
+
+###
+PUT http://localhost:3000/employee/1 HTTP/1.1
+Authorization: Bearer {{access_token}}
+content-type: application/json
+
+{
+    "username": "rszczepanski02",
+    "password": "admin",
+    "email": "rszczepanski02@gmail.com",
+    "firstName": "Admin",
+    "lastName": "User",
+    "isActive": true,
+    "ipVerification": false
+}
