@@ -6,7 +6,6 @@ import { Authority } from '@prisma/client';
 export const AuthoritiesGuard = (authorities?: Authority[]): Type<CanActivate> => {
   class RoleGuardMixin extends JwtAuthGuard {
     async canActivate(context: ExecutionContext): Promise<boolean> {
-      console.log('test');
       await super.canActivate(context);
       const request = context.switchToHttp().getRequest<IReqWithEmployeeCredentials>();
       const employee = request.user;

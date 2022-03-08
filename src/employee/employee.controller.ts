@@ -15,7 +15,7 @@ import { AuthoritiesGuard } from 'src/shared/guards/authorities.guard';
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
 
-  @UseGuards(AuthoritiesGuard([Authority.ROOT]))
+  // @UseGuards(AuthoritiesGuard([Authority.ROOT]))
   @Post()
   async create(@Body() createEmployeeDto: CreateEmployeeDto): Promise<IResponseHandler<string>> {
     // to change

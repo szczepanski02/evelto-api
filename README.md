@@ -1,5 +1,5 @@
-<h1 style="text-align: center;">(EMS) Evelto Management System</h1>
-<h2 style="text-align: center;">BACKEND</h2>
+<h1 align="center">(EMS) Evelto Management System</h1>
+<h2 align="center">BACKEND</h2>
 
 ## Project setup:
 

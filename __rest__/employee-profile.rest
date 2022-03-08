@@ -1,0 +1,10 @@
+@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJyc3pjemVwYW5za2kwMiIsImZpcnN0TmFtZSI6IkFkbWluIiwibGFzdE5hbWUiOiJTemN6ZXBhxYRza2kiLCJhdXRob3JpdHkiOiJNT0RFUkFUT1IiLCJpYXQiOjE2NDY3NDE0OTksImV4cCI6MTY0Njc0MjM5OX0.b-Rsr7AKVwQ0gCXqSY5YlVvCQ0QVmFaHMKQCFrUypDM
+
+PUT http://localhost:3000/employee-profile/password HTTP/1.1
+Authorization: Bearer {{access_token}}
+content-type: application/json
+
+{
+  "password": "admin",
+  "newPassword": "admin"
+}

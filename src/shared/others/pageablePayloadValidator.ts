@@ -5,7 +5,6 @@ export const pageablePayloadValidator = (pageablePayload: IPageable) => {
   if(!pageablePayload.filterBy) pageablePayload.filterBy = 'id';
   if(!pageablePayload.filterValue) pageablePayload.filterValue = undefined;
   if(!pageablePayload.itemsPerPage) pageablePayload.itemsPerPage = 10;
-  console.log(pageablePayload);
 
   +pageablePayload.currentPage;
   +pageablePayload.itemsPerPage;
