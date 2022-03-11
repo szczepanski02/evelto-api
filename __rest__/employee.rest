@@ -5,11 +5,11 @@ Authorization: Bearer {{access_token}}
 content-type: application/json
 
 {
-    "username": "admin",
+    "username": "rszczepanski",
     "password": "admin",
-    "email": "admin@gmail.com",
-    "firstName": "Admin",
-    "lastName": "User"
+    "email": "rszczepanski@gmail.com",
+    "firstName": "Radosław",
+    "lastName": "Szczepański"
 }
 
 ###

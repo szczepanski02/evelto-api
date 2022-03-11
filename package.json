@@ -14,7 +14,7 @@
     "db:live": "npx prisma studio",
     "db:migrate": "npx prisma migrate dev --name 'init' --preview-feature",
     "db:generate": "npx prisma generate",
-    "db:init": "npx prisma push && npx prisma pull && px prisma generate",
+    "db:init": "npx prisma push && npx prisma pull && npx prisma generate",
     "start": "nest start",
     "start:dev": "NODE_ENV=development nest start --watch",
     "start:debug": "nest start --debug --watch",

@@ -14,7 +14,8 @@ export class AuthController {
   @Post('/signin')
   @HttpCode(HttpStatus.OK)
   async signin(@Req() req: any): Promise<IResponseHandler<{ access_token: string }>> {
-    const responseObject = await this.authService.signin(req.user);
+    const reqIp = req.headers['x-forwarded-for'] || req.socket.remoteAdress || req.connection.socket || null;
+    const responseObject = await this.authService.signin(req.user, reqIp);
     if(!responseObject) {
       throw new HttpException(
         'Some problem with server authorization, please raport it to IT Support',

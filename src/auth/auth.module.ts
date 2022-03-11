@@ -6,11 +6,13 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
+import { AuthRequestsModule } from './auth-requests/auth-requests.module';
 
 @Module({
   imports: [
     EmployeeModule,
     PassportModule,
+    AuthRequestsModule,
     JwtModule.register({
       secret: `${process.env.JWT_SECRET_KEY}`,
       signOptions: { expiresIn: '15m' }

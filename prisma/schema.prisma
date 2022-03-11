@@ -8,18 +8,34 @@ datasource db {
 }
 
 model Employee {
-  id             Int       @id @default(autoincrement())
-  username       String    @unique
+  id             Int             @id @default(autoincrement())
+  username       String          @unique
   password       String
   firstName      String
   lastName       String
-  email          String    @unique
-  isActive       Boolean   @default(true)
-  ipVerification Boolean   @default(true)
+  email          String          @unique
+  isActive       Boolean         @default(true)
+  ipVerification Boolean         @default(true)
   profileImg     String?
-  createdAt      DateTime  @default(now())
+  createdAt      DateTime        @default(now())
   createdBy      String
-  authority      Authority @default(MODERATOR)
+  authority      Authority       @default(MODERATOR)
+  ipRequests     IPRequest[]
+  verificatedIPs VerificatedIP[]
+}
+
+model IPRequest {
+  id         Int      @id @default(autoincrement())
+  address    String
+  employeeId Int
+  createdBy  Employee @relation(fields: [employeeId], references: [id])
+}
+
+model VerificatedIP {
+  id         Int      @id @default(autoincrement())
+  address    String
+  employeeId Int
+  employee   Employee @relation(fields: [employeeId], references: [id])
 }
 
 enum Authority {

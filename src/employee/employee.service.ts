@@ -6,10 +6,10 @@ import { CreateEmployeeDto } from './dtos/create-employee.dto';
 import { PrismaClientService } from './../prisma-client/prisma-client.service';
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { Employee } from '.prisma/client';
 import { EmployeeOptionalDto } from './dtos/employee-optional.dto';
 import { IPageableResponse } from 'src/shared/interfaces/IPageableResponse';
 import { PrismaErrorHandler } from 'src/prisma-client/PrismaErrorHandler';
+import { Employee } from '@prisma/client';
 
 @Injectable()
 export class EmployeeService {
@@ -26,6 +26,20 @@ export class EmployeeService {
       return null;
     }
     return employee;
+  }
+
+  async getEmployeeWithRelations(id: number): Promise<Employee | null> {
+    const employee = await this.prismaClientService.employee.findUnique({
+      where: {
+        id
+      },
+      include: {
+        ipRequests: true,
+        verificatedIPs: true
+      }
+    });
+    if(employee) return employee;
+    return null;
   }
 
   async findByUsername(username: string): Promise<Employee | null> {
