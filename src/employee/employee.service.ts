@@ -28,7 +28,7 @@ export class EmployeeService {
     return employee;
   }
 
-  async getEmployeeWithRelations(id: number): Promise<Employee | null> {
+  async getEmployeeWithRelations(id: number): Promise<EmployeeOptionalDto | null> {
     const employee = await this.prismaClientService.employee.findUnique({
       where: {
         id

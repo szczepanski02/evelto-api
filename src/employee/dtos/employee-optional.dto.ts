@@ -1,3 +1,4 @@
+import { IPRequest, VerificatedIP } from '@prisma/client';
 import { Authority } from ".prisma/client";
 
 export class EmployeeOptionalDto {
@@ -13,4 +14,6 @@ export class EmployeeOptionalDto {
   createdAt?: Date;
   createdBy?: string;
   authority?: Authority;
+  ipRequests?: IPRequest[];
+  verificatedIPs?: VerificatedIP[];
 }
