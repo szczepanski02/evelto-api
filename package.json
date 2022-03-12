@@ -9,6 +9,7 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "postinstall": "npx prisma generate && npm run build",
+    "heroku-postbuild": "npx prisma migrate dev",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start:local-db": "docker-compose up",
     "db:live": "npx prisma studio",
