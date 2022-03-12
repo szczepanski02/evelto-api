@@ -9,7 +9,7 @@
     "node": "17.3.x"
   },
   "scripts": {
-    "prebuild": "rimraf dist && npx prisma migrate dev",
+    "prebuild": "rimraf dist",
     "build": "nest build",
     "postinstall": "npx prisma generate && npm run build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
