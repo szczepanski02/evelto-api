@@ -38,6 +38,7 @@ export class AuthService {
 
   async authorizeConnection(id: number, address: string): Promise<true> {
     const employee = await this.employeeService.getEmployeeWithRelations(id);
+    console.log(employee.ipRequests);
     if(!employee) {
       throw new HttpException('Error at user authorization', HttpStatus.INTERNAL_SERVER_ERROR);
     }

@@ -1,7 +1,7 @@
 import { PrismaClientModule } from './../prisma-client/prisma-client.module';
-import { Module } from '@nestjs/common';
 import { EmployeeService } from './employee.service';
 import { EmployeeController } from './employee.controller';
+import { Module } from '@nestjs/common';
 
 @Module({
   imports: [PrismaClientModule],

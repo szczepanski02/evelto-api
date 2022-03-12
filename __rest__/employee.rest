@@ -39,3 +39,13 @@ content-type: application/json
     "isActive": true,
     "ipVerification": false
 }
+
+###
+// getting all verificated IPs of employee, PARAM: employee ID
+GET http://localhost:3000/employee/verificatedIPs/2 HTTP/1.1
+Authorization: Bearer {{access_token}}
+
+###
+// getting all IP requests of employee, PARAM: employee ID
+GET http://localhost:3000/employee/IPRequests/2 HTTP/1.1
+Authorization: Bearer {{access_token}}
