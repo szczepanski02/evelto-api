@@ -1,3 +1,4 @@
+import { IReqWithEmployeeCredentials } from './../shared/interfaces/IReqWithEmployeeCredentials';
 import { IdValidator } from './../shared/others/idValidator';
 import { VerificatedIP, IPRequest } from '@prisma/client';
 import { Authority } from '.prisma/client';
@@ -7,7 +8,7 @@ import { pageablePayloadValidator } from './../shared/others/pageablePayloadVali
 import { IPageable } from './../shared/interfaces/IPageable';
 import { ResponseHandler, IResponseHandler } from './../shared/others/responseHandler';
 import { CreateEmployeeDto } from './dtos/create-employee.dto';
-import { Body, Controller, Post, HttpException, HttpStatus, Param, Get, Query, Delete, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, HttpException, HttpStatus, Param, Get, Query, Delete, Put, UseGuards, Req } from '@nestjs/common';
 import { EmployeeService } from './employee.service';
 import { EmployeeOptionalDto } from './dtos/employee-optional.dto';
 import { employeeSelectSchemaPageable, employeeSelectSchemaWithoutPassword } from './employee.select-schema';
@@ -17,12 +18,16 @@ import { AuthoritiesGuard } from 'src/shared/guards/authorities.guard';
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
 
-  // @UseGuards(AuthoritiesGuard([Authority.ROOT]))
+  @UseGuards(AuthoritiesGuard([Authority.ROOT]))
   @Post()
-  async create(@Body() createEmployeeDto: CreateEmployeeDto): Promise<IResponseHandler<string>> {
+  async create(
+    @Body() createEmployeeDto: CreateEmployeeDto,
+    @Req() req: IReqWithEmployeeCredentials
+  ): Promise<IResponseHandler<string>> {
     // to change
-    createEmployeeDto.createdBy = 'SERVER_ROOT';
+    // createEmployeeDto.createdBy = 'SERVER_ROOT';
     // 
+    createEmployeeDto.createdBy = req.user.username; 
     const responseObject = await this.employeeService.create(createEmployeeDto);
     if(!responseObject) {
       throw new HttpException(
@@ -42,6 +47,12 @@ export class EmployeeController {
     if(!responseObject) {
       throw new HttpException('Employee not found', HttpStatus.BAD_REQUEST);
     }
+    return ResponseHandler<EmployeeOptionalDto>(HttpStatus.OK, responseObject);
+  }
+
+  @Get('/username/:username')
+  async findByUsername(@Param('username') username: string): Promise<any> {
+    const responseObject = await this.employeeService.getEmployeeByUsername(username);
     return ResponseHandler<EmployeeOptionalDto>(HttpStatus.OK, responseObject);
   }
 
@@ -72,28 +83,11 @@ export class EmployeeController {
     return ResponseHandler<string>(HttpStatus.OK, 'Employee has been updated');
   }
 
-  // getting all verificated IPs of employee
-  @Get('/verificatedIPs/:id')
-  async employeeVerificatedIPs(@Param('id') employeeId: string): Promise<IResponseHandler<{ id: number, address: string }[]>> {
-    IdValidator(+employeeId);
-    const employee = await this.employeeService.getEmployeeWithRelations(+employeeId);
-    if(!employee) throw new HttpException('Cannot find employee', HttpStatus.BAD_REQUEST);
-    const verificatedIPs = employee.verificatedIPs.map((obj: VerificatedIP) => {
-      return { id: obj.id, address: obj.address };
-    });
-    return ResponseHandler<{ id: number, address: string }[]>(HttpStatus.OK, verificatedIPs);
-  }
-
-  // getting all IP requests of employee
-  @Get('/IPRequests/:id')
-  async employeeIPRequests(@Param('id') employeeId: string): Promise<IResponseHandler<{ id: number, address: string }[]>> {
-    IdValidator(+employeeId);
-    const employee = await this.employeeService.getEmployeeWithRelations(+employeeId);
-    if(!employee) throw new HttpException('Cannot find employee', HttpStatus.BAD_REQUEST);
-    const requests = employee.ipRequests.map((obj: IPRequest) => {
-      return { id: obj.id, address: obj.address };
-    });
-    return ResponseHandler<{ id: number, address: string }[]>(HttpStatus.OK, requests);
+  @UseGuards(AuthoritiesGuard([Authority.ROOT]))
+  @Put('/authority/:id')
+  async updateAuthority(@Body() updateAuthority: { authority: Authority }, @Param('id') id: string) {
+    await this.employeeService.changeAuthority(+id, updateAuthority);
+    return ResponseHandler<string>(HttpStatus.OK, `Employee authority has been setted to ${updateAuthority.authority}`)
   }
 
 }

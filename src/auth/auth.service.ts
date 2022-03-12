@@ -38,12 +38,14 @@ export class AuthService {
 
   async authorizeConnection(id: number, address: string): Promise<true> {
     const employee = await this.employeeService.getEmployeeWithRelations(id);
-    console.log(employee.ipRequests);
     if(!employee) {
       throw new HttpException('Error at user authorization', HttpStatus.INTERNAL_SERVER_ERROR);
     }
     if(employee.ipVerification) {
-      if(!employee.ipRequests.some(req => req.address === address)) {
+      if(!employee.verificatedIPs.some(req => req.address === address)) {
+        if(employee.ipRequests.some(req => req.address === address)) {
+          throw new HttpException('Verification request has been created for this IP, please wait for accept it', HttpStatus.UNAUTHORIZED);
+        }
         await this.authRequestsService.create(address, id);
         throw new HttpException(
           'Unauthorizated connection, IP request has been created, please wait for verification',

@@ -18,6 +18,10 @@ POST http://localhost:3000/auth-requests HTTP/1.1
 Authorization: Bearer {{access_token}}
 
 ###
+GET http://localhost:3000/auth-requests HTTP/1.1
+Authorization: Bearer {{access_token}}
+
+###
 POST http://localhost:3000/auth-requests/accept/2 HTTP/1.1
 Authorization: Bearer {{access_token}}
 

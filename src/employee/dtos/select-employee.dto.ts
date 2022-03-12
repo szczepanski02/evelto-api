@@ -1,5 +1,3 @@
-import { Authority } from "@prisma/client";
-
 export class SelectEmployeeDto {
   id?: boolean;
   username?: boolean;

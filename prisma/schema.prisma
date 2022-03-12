@@ -29,6 +29,7 @@ model IPRequest {
   address    String
   employeeId Int
   createdBy  Employee @relation(fields: [employeeId], references: [id])
+  createdAt  DateTime @default(now())
 }
 
 model VerificatedIP {

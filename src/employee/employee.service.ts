@@ -9,7 +9,8 @@ import * as bcrypt from 'bcrypt';
 import { EmployeeOptionalDto } from './dtos/employee-optional.dto';
 import { IPageableResponse } from 'src/shared/interfaces/IPageableResponse';
 import { PrismaErrorHandler } from 'src/prisma-client/PrismaErrorHandler';
-import { Employee } from '@prisma/client';
+import { Employee, Authority } from '@prisma/client';
+import { employeeSelectSchemaWithoutPassword } from './employee.select-schema';
 
 @Injectable()
 export class EmployeeService {
@@ -42,6 +43,17 @@ export class EmployeeService {
     return null;
   }
 
+  async getEmployeeByUsername(username: string): Promise<EmployeeOptionalDto> {
+    try {
+      return await this.prismaClientService.employee.findUnique({
+        where: { username },
+        select: employeeSelectSchemaWithoutPassword
+      });
+    } catch (error) {
+      PrismaErrorHandler(error);
+    }
+  }
+
   async findByUsername(username: string): Promise<Employee | null> {
     const employee = await this.prismaClientService.employee.findUnique({
       where: {
@@ -69,6 +81,7 @@ export class EmployeeService {
       });
       return newEmployee;
     } catch (error) {
+      console.log(error);
       PrismaErrorHandler(error);
     }
   }
@@ -78,7 +91,8 @@ export class EmployeeService {
       const employees = await this.prismaClientService.employee.findMany({
         where: {
           [employeePageableDto.filterBy]: {
-            contains: employeePageableDto.filterValue
+            contains: employeePageableDto.filterValue,
+            ...(employeePageableDto.filterValue && {mode: 'insensitive'})
           }
         },
         take: +employeePageableDto.itemsPerPage,
@@ -110,11 +124,25 @@ export class EmployeeService {
         data: {
           username: payload.username,
           firstName: payload.firstName,
+          lastName: payload.lastName,
           email: payload.email,
           isActive: payload.isActive,
           ipVerification: payload.ipVerification
         }
       })
+    } catch (error) {
+      PrismaErrorHandler(error);
+    }
+  }
+
+  async changeAuthority(id: number, payload: { authority: Authority }) {
+    try {
+      return await this.prismaClientService.employee.update({
+        where: { id },
+        data: {
+          authority: payload.authority
+        }
+      });
     } catch (error) {
       PrismaErrorHandler(error);
     }

@@ -1,12 +1,14 @@
+import { EmployeeService } from './../../employee/employee.service';
 import { Injectable } from '@nestjs/common';
 import { IPRequest, VerificatedIP } from '@prisma/client';
 import { PrismaClientService } from 'src/prisma-client/prisma-client.service';
 import { PrismaErrorHandler } from 'src/prisma-client/PrismaErrorHandler';
-
 @Injectable()
 export class AuthIpsService {
 
-  constructor(private readonly prismaClientService: PrismaClientService) {}
+  constructor(
+    private readonly prismaClientService: PrismaClientService
+  ) {}
 
   async addVerificatedIPs(ipRequest: IPRequest): Promise<VerificatedIP> {
     try {
@@ -30,6 +32,5 @@ export class AuthIpsService {
       PrismaErrorHandler(error);
     }
   }
-
 
 }
