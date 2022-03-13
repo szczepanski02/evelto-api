@@ -4,7 +4,7 @@ import { IResponseHandler, ResponseHandler } from './../shared/others/responseHa
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { Controller, HttpCode, Post, UseGuards, HttpStatus, Req, HttpException, Get } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthoritiesGuard } from 'src/shared/guards/authorities.guard';
+import { AuthoritiesGuard } from '../shared/guards/authorities.guard';
 
 @Controller('auth')
 export class AuthController {

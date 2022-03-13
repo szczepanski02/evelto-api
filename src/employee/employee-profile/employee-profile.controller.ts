@@ -3,18 +3,18 @@ import { IResponseHandler, ResponseHandler } from './../../shared/others/respons
 import { PasswordUpdateDto } from './dtos/password-update.dto';
 import { Body, Controller, Get, HttpException, HttpStatus, Param, Put, Request, UseGuards, Response, Post, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { EmployeeProfileService } from './employee-profile.service';
-import { AuthoritiesGuard } from 'src/shared/guards/authorities.guard';
+import { AuthoritiesGuard } from '../../shared/guards/authorities.guard';
 import { Observable, of } from 'rxjs';
 import * as fs from 'fs';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { multerEmployeeAvatarConfig } from 'src/config/multer-employee-avatar.config';
+import { multerEmployeeAvatarConfig } from '../../config/multer-employee-avatar.config';
 
 @Controller('employee-profile')
 export class EmployeeProfileController {
   constructor(private readonly employeeProfileService: EmployeeProfileService) {}
 
   @UseGuards(AuthoritiesGuard())
-  @Put('/password/:id?')
+  @Put('/password')
   async updateEmployeePassword(
     @Body() passwordUpdateDto: PasswordUpdateDto,
     @Request() req: IReqWithEmployeeCredentials,

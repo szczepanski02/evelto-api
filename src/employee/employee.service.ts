@@ -7,8 +7,8 @@ import { PrismaClientService } from './../prisma-client/prisma-client.service';
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { EmployeeOptionalDto } from './dtos/employee-optional.dto';
-import { IPageableResponse } from 'src/shared/interfaces/IPageableResponse';
-import { PrismaErrorHandler } from 'src/prisma-client/PrismaErrorHandler';
+import { IPageableResponse } from '../shared/interfaces/IPageableResponse';
+import { PrismaErrorHandler } from '../prisma-client/PrismaErrorHandler';
 import { Employee, Authority } from '@prisma/client';
 import { employeeSelectSchemaWithoutPassword } from './employee.select-schema';
 

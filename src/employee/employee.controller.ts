@@ -1,6 +1,5 @@
 import { IReqWithEmployeeCredentials } from './../shared/interfaces/IReqWithEmployeeCredentials';
 import { IdValidator } from './../shared/others/idValidator';
-import { VerificatedIP, IPRequest } from '@prisma/client';
 import { Authority } from '.prisma/client';
 import { UpdateEmployeeDto } from './dtos/update-employee.dto';
 import { IPageableResponse } from './../shared/interfaces/IPageableResponse';
@@ -12,7 +11,7 @@ import { Body, Controller, Post, HttpException, HttpStatus, Param, Get, Query, D
 import { EmployeeService } from './employee.service';
 import { EmployeeOptionalDto } from './dtos/employee-optional.dto';
 import { employeeSelectSchemaPageable, employeeSelectSchemaWithoutPassword } from './employee.select-schema';
-import { AuthoritiesGuard } from 'src/shared/guards/authorities.guard';
+import { AuthoritiesGuard } from '../shared/guards/authorities.guard';
 
 @Controller('employee')
 export class EmployeeController {
@@ -53,6 +52,9 @@ export class EmployeeController {
   @Get('/username/:username')
   async findByUsername(@Param('username') username: string): Promise<any> {
     const responseObject = await this.employeeService.getEmployeeByUsername(username);
+    if(!responseObject) {
+      throw new HttpException('Employee not found', HttpStatus.BAD_REQUEST);
+    }
     return ResponseHandler<EmployeeOptionalDto>(HttpStatus.OK, responseObject);
   }
 

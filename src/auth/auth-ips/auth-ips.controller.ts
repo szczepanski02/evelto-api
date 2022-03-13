@@ -1,15 +1,12 @@
-import { EmployeeService } from './../../employee/employee.service';
 import { ResponseHandler, IResponseHandler } from './../../shared/others/responseHandler';
-import { Controller, Param, Delete, HttpStatus, Get, HttpException } from '@nestjs/common';
+import { Controller, Param, Delete, HttpStatus, Get } from '@nestjs/common';
 import { AuthIpsService } from './auth-ips.service';
-import { IdValidator } from 'src/shared/others/idValidator';
-import { VerificatedIP } from '@prisma/client';
+import { IdValidator } from '../../shared/others/idValidator';
 
 @Controller('auth-ips')
 export class AuthIpsController {
   constructor(
     private readonly authIpsService: AuthIpsService,
-    private readonly employeeService: EmployeeService
   ) {}
 
   @Delete(':id')
@@ -23,12 +20,8 @@ export class AuthIpsController {
   @Get(':id')
   async employeeVerificatedIPs(@Param('id') employeeId: string): Promise<IResponseHandler<{ id: number, address: string }[]>> {
     IdValidator(+employeeId);
-    const employee = await this.employeeService.getEmployeeWithRelations(+employeeId);
-    if(!employee) throw new HttpException('Cannot find employee', HttpStatus.BAD_REQUEST);
-    const verificatedIPs = employee.verificatedIPs.map((obj: VerificatedIP) => {
-      return { id: obj.id, address: obj.address };
-    });
-    return ResponseHandler<{ id: number, address: string }[]>(HttpStatus.OK, verificatedIPs);
+    const responseObjects = await this.authIpsService.getIPsOfEmployee(+employeeId);
+    return ResponseHandler<{ id: number, address: string }[]>(HttpStatus.OK, responseObjects);
   }
 
 }

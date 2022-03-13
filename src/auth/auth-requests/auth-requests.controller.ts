@@ -1,16 +1,13 @@
-import { EmployeeService } from './../../employee/employee.service';
 import { IResponseHandler, ResponseHandler } from './../../shared/others/responseHandler';
-import { Controller, Delete, Get, HttpException, HttpStatus, Param, Post } from '@nestjs/common';
+import { Controller, Delete, Get, HttpStatus, Param, Post } from '@nestjs/common';
 import { AuthRequestsService } from './auth-requests.service';
-import { IdValidator } from 'src/shared/others/idValidator';
-import { IPRequest } from '@prisma/client';
+import { IdValidator } from '../../shared/others/idValidator';
 import { GetAllRequestsDto } from './dtos/get.all-requests.dto';
 
 @Controller('auth-requests')
 export class AuthRequestsController {
   constructor(
-    private readonly authRequestsService: AuthRequestsService,
-    private readonly employeeService: EmployeeService
+    private readonly authRequestsService: AuthRequestsService
   ) {}
 
   @Post(':requestId')
@@ -24,12 +21,8 @@ export class AuthRequestsController {
   @Get(':id')
   async employeeIPRequests(@Param('id') employeeId: string): Promise<IResponseHandler<{ id: number, address: string }[]>> {
     IdValidator(+employeeId);
-    const employee = await this.employeeService.getEmployeeWithRelations(+employeeId);
-    if(!employee) throw new HttpException('Cannot find employee', HttpStatus.BAD_REQUEST);
-    const requests = employee.ipRequests.map((obj: IPRequest) => {
-      return { id: obj.id, address: obj.address };
-    });
-    return ResponseHandler<{ id: number, address: string }[]>(HttpStatus.OK, requests);
+    const responseObjects = await this.authRequestsService.getAllIPRequestsOfEmployee(+employeeId);
+    return ResponseHandler<{ id: number, address: string }[]>(HttpStatus.OK, responseObjects);
   }
 
   @Get()

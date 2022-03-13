@@ -1,7 +1,8 @@
+import { EmployeeService } from './../../employee/employee.service';
 import { IPRequest } from '@prisma/client';
 import { AuthIpsService } from './../auth-ips/auth-ips.service';
-import { PrismaErrorHandler } from 'src/prisma-client/PrismaErrorHandler';
-import { PrismaClientService } from 'src/prisma-client/prisma-client.service';
+import { PrismaErrorHandler } from '../../prisma-client/PrismaErrorHandler';
+import { PrismaClientService } from '../../prisma-client/prisma-client.service';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { GetAllRequestsDto } from './dtos/get.all-requests.dto';
 
@@ -9,7 +10,8 @@ import { GetAllRequestsDto } from './dtos/get.all-requests.dto';
 export class AuthRequestsService {
   constructor(
     private readonly prismaClientService: PrismaClientService,
-    private readonly authIPsService: AuthIpsService
+    private readonly authIPsService: AuthIpsService,
+    private readonly employeeService: EmployeeService
   ) {}
 
   async create(address: string, id: number): Promise<IPRequest> {
@@ -24,6 +26,15 @@ export class AuthRequestsService {
       console.log(error);
       PrismaErrorHandler(error);
     }
+  }
+
+  async getAllIPRequestsOfEmployee(employeeId: number): Promise<{ id: number, address: string }[]> {
+    const employee = await this.employeeService.getEmployeeWithRelations(+employeeId);
+    if(!employee) throw new HttpException('Cannot find employee', HttpStatus.BAD_REQUEST);
+    const requests = employee.ipRequests.map((obj: IPRequest) => {
+      return { id: obj.id, address: obj.address };
+    });
+    return requests;
   }
 
   async accept(requestId: number): Promise<IPRequest> {
@@ -78,5 +89,6 @@ export class AuthRequestsService {
       PrismaErrorHandler(error);
     }
   }
+  
 
 }

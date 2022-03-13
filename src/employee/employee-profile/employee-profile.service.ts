@@ -1,8 +1,8 @@
 import { Employee } from '.prisma/client';
-import { PrismaErrorHandler } from 'src/prisma-client/PrismaErrorHandler';
+import { PrismaErrorHandler } from '../../prisma-client/PrismaErrorHandler';
 import { EmployeeService } from './../employee.service';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { PrismaClientService } from 'src/prisma-client/prisma-client.service';
+import { PrismaClientService } from '../../prisma-client/prisma-client.service';
 import { PasswordUpdateDto } from './dtos/password-update.dto';
 import * as bcrypt from 'bcrypt';
 import * as fs from 'fs';
