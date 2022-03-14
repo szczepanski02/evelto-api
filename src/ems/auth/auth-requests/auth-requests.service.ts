@@ -23,7 +23,6 @@ export class AuthRequestsService {
         }
       })
     } catch (error) {
-      console.log(error);
       PrismaErrorHandler(error);
     }
   }

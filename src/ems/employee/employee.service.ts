@@ -81,7 +81,6 @@ export class EmployeeService {
       });
       return newEmployee;
     } catch (error) {
-      console.log(error);
       PrismaErrorHandler(error);
     }
   }
