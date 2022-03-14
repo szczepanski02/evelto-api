@@ -9,7 +9,7 @@ import * as fs from 'fs';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { multerEmployeeAvatarConfig } from '../../config/multer-employee-avatar.config';
 
-@Controller('employee-profile')
+@Controller('ems/employee-profile')
 export class EmployeeProfileController {
   constructor(private readonly employeeProfileService: EmployeeProfileService) {}
 
