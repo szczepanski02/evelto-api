@@ -1,5 +1,5 @@
 import { IReqWithEmployeeCredentials } from './../../shared/interfaces/IReqWithEmployeeCredentials';
-import { IResponseHandler, ResponseHandler } from './../../shared/others/responseHandler';
+import { IResponseHandler, ResponseHandler } from '../../../helpers/responseHandler';
 import { PasswordUpdateDto } from './dtos/password-update.dto';
 import { Body, Controller, Get, HttpException, HttpStatus, Param, Put, Request, UseGuards, Response, Post, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { EmployeeProfileService } from './employee-profile.service';

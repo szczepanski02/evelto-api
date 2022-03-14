@@ -1,1 +1,63 @@
+model User {
+  id          String         @id @default(uuid())
+  username    String?        @unique
+  password    String?
+  firstName   String
+  lastName    String
+  email       String         @unique
+  isActive    ClientIsActive
+  lang        Lang           @default(EN)
+  accountType AccountType    @default(CLIENT)
+  userDetails UserDetails?
 
+  @@map("users")
+}
+
+model UserDetails {
+  id          Int          @id @default(autoincrement())
+  userId      String       @unique
+  profileImg  String?
+  age         Int?
+  gender      Gender       @default(OTHER)
+  createdAt   DateTime     @default(now())
+  user        User         @relation(fields: [userId], references: [id])
+  userAddress UserAddress?
+
+  @@map("users_details")
+}
+
+model UserAddress {
+  id            Int         @id @default(autoincrement())
+  userDetailsId Int         @unique
+  country       String?
+  city          String?
+  zipCode       Int?
+  address1      String?
+  address2      String?
+  userDetails   UserDetails @relation(fields: [userDetailsId], references: [id])
+
+  @@map("users_addresses")
+}
+
+enum AccountType {
+  CLIENT
+  CREATOR
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum Lang {
+  EN
+  PL
+}
+
+enum ClientIsActive {
+  IS_ACTIVE
+  BLOCKED
+  EMAIL_VERIFICATION
+  PROFILE_NOT_COMPLETE
+}

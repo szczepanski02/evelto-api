@@ -1,7 +1,7 @@
-import { ResponseHandler, IResponseHandler } from '../../shared/others/responseHandler';
+import { ResponseHandler, IResponseHandler } from '../../../helpers/responseHandler';
 import { Controller, Param, Delete, HttpStatus, Get } from '@nestjs/common';
 import { AuthIpsService } from './auth-ips.service';
-import { IdValidator } from '../../shared/others/idValidator';
+import { IdValidator } from '../../../helpers/idValidator';
 
 @Controller('ems/auth-ips')
 export class AuthIpsController {

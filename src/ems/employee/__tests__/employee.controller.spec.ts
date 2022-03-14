@@ -3,7 +3,7 @@ import { HttpException } from '@nestjs/common';
 import { IReqWithEmployeeCredentials } from './../../shared/interfaces/IReqWithEmployeeCredentials';
 import { CreateEmployeeDto } from './../dtos/create-employee.dto';
 import { Authority } from '@prisma/client';
-import { ResponseHandler } from './../../shared/others/responseHandler';
+import { ResponseHandler } from '../../../helpers/responseHandler';
 import { Test, TestingModule } from "@nestjs/testing";
 import { EmployeeController } from "../employee.controller";
 import { EmployeeService } from "../employee.service";

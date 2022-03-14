@@ -1,6 +1,6 @@
 import { JwtPayloadDto } from './dtos/jwt-payload.dto';
 import { IReqWithEmployeeCredentials } from '../shared/interfaces/IReqWithEmployeeCredentials';
-import { IResponseHandler, ResponseHandler } from '../shared/others/responseHandler';
+import { IResponseHandler, ResponseHandler } from '../../helpers/responseHandler';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { Controller, HttpCode, Post, UseGuards, HttpStatus, Req, HttpException, Get } from '@nestjs/common';
 import { AuthService } from './auth.service';

@@ -1,5 +1,5 @@
-import { JwtStrategy } from './strategies/jwt.strategy';
-import { LocalStrategy } from './strategies/local.strategy';
+import { EmployeeJwtAuthStrategy } from './strategies/employee-jwt-auth.strategy';
+import { EmployeeLocalStrategy } from './strategies/employee-local.strategy';
 import { EmployeeModule } from './../employee/employee.module';
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -18,7 +18,7 @@ import { AuthRequestsModule } from './auth-requests/auth-requests.module';
       signOptions: { expiresIn: '15m' }
     })
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, EmployeeLocalStrategy, EmployeeJwtAuthStrategy],
   controllers: [AuthController],
   exports: [AuthService]
 })

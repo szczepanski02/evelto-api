@@ -1,4 +1,4 @@
-import { ResponseHandler } from './../../../shared/others/responseHandler';
+import { ResponseHandler } from '../../../../helpers/responseHandler';
 import { PasswordUpdateDto } from './../dtos/password-update.dto';
 import { employeesMock } from "../../__tests__/employees.mock";
 import * as httpMocks from 'node-mocks-http';

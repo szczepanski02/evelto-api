@@ -1,8 +1,8 @@
-import { IResponseHandler, ResponseHandler } from '../../shared/others/responseHandler';
+import { IResponseHandler, ResponseHandler } from '../../../helpers/responseHandler';
 import { Controller, Delete, Get, HttpStatus, Param, Post } from '@nestjs/common';
 import { AuthRequestsService } from './auth-requests.service';
 import { GetAllRequestsDto } from './dtos/get.all-requests.dto';
-import { IdValidator } from '../../shared/others/idValidator';
+import { IdValidator } from '../../../helpers/idValidator';
 
 @Controller('ems/auth-requests')
 export class AuthRequestsController {
