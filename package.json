@@ -1,7 +1,7 @@
 {
-  "name": "ems-backend",
+  "name": "evelto_backend",
   "version": "0.0.1",
-  "description": "Evelto Management System (EMS) Backend API for web application",
+  "description": "Evelto Backend application based on nest, prisma and postgresql",
   "author": "rszczepanski02 - Evelto Sp. z.o.o.",
   "private": true,
   "license": "UNLICENSED",

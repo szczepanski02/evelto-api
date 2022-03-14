@@ -1,0 +1,30 @@
+@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJyc3pjemVwYW5za2kiLCJmaXJzdE5hbWUiOiJSYWRvc8WCYXciLCJsYXN0TmFtZSI6IlN6Y3plcGHFhHNraSIsImF1dGhvcml0eSI6Ik1PREVSQVRPUiIsImlhdCI6MTY0NzAzMzEwNSwiZXhwIjoxNjQ3MDM0MDA1fQ.5J5n2shGNY33DrEQscgxqYurBZYIC3bdUxW6www6mB4
+
+// AUTH controller
+POST http://localhost:3000/ems/auth/signin HTTP/1.1
+content-type: application/json
+
+{
+    "username": "rszczepanski",
+    "password": "admin"
+}
+
+###
+GET http://localhost:3000/ems/auth/authorize HTTP/1.1
+Authorization: Bearer {{access_token}}
+
+###
+POST http://localhost:3000/ems/auth-requests HTTP/1.1
+Authorization: Bearer {{access_token}}
+
+###
+GET http://localhost:3000/ems/auth-requests HTTP/1.1
+Authorization: Bearer {{access_token}}
+
+###
+POST http://localhost:3000/ems/auth-requests/accept/2 HTTP/1.1
+Authorization: Bearer {{access_token}}
+
+###
+DELETE http://localhost:3000/ems/auth-ips/1 HTTP/1.1
+Authorization: Bearer {{access_token}}

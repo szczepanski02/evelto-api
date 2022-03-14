@@ -1,0 +1,51 @@
+@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJyc3pjemVwYW5za2kwMiIsImZpcnN0TmFtZSI6IkFkbWluIiwibGFzdE5hbWUiOiJTemN6ZXBhxYRza2kiLCJhdXRob3JpdHkiOiJNT0RFUkFUT1IiLCJpYXQiOjE2NDY3NjcxNDcsImV4cCI6MTY0Njc2ODA0N30.etB_kSlUAWLThlWFOUr-ZdNnGsD8F9Dr6bcWnho5keU
+
+POST http://localhost:3000/ems/employee HTTP/1.1
+Authorization: Bearer {{access_token}}
+content-type: application/json
+
+{
+    "username": "rszczepanski",
+    "password": "admin",
+    "email": "rszczepanski@gmail.com",
+    "firstName": "Radosław",
+    "lastName": "Szczepański"
+}
+
+###
+GET http://localhost:3000/ems/employee/1 HTTP/1.1
+Authorization: Bearer {{access_token}}
+
+###
+// queries: currentPage, itemsPerPage, filterBy, filterValue
+GET http://localhost:3000/ems/employee HTTP/1.1
+Authorization: Bearer {{access_token}}
+
+###
+DELETE http://localhost:3000/ems/employee/10 HTTP/1.1
+Authorization: Bearer {{access_token}}
+
+###
+PUT http://localhost:3000/ems/employee/1 HTTP/1.1
+Authorization: Bearer {{access_token}}
+content-type: application/json
+
+{
+    "username": "rszczepanski02",
+    "password": "admin",
+    "email": "rszczepanski02@gmail.com",
+    "firstName": "Admin",
+    "lastName": "User",
+    "isActive": true,
+    "ipVerification": false
+}
+
+###
+// getting all verificated IPs of employee, PARAM: employee ID
+GET http://localhost:3000/employee/ems/verificatedIPs/2 HTTP/1.1
+Authorization: Bearer {{access_token}}
+
+###
+// getting all IP requests of employee, PARAM: employee ID
+GET http://localhost:3000/employee/ems/IPRequests/2 HTTP/1.1
+Authorization: Bearer {{access_token}}
