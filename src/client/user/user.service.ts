@@ -1,6 +1,6 @@
 import { User } from './../../../node_modules/.prisma/client/index.d';
 import { GetUniquePropertyDto } from './dtos/get.unique-property.dto';
-import { PrismaClientService } from 'src/prisma-client/prisma-client.service';
+import { PrismaClientService } from '../../prisma-client/prisma-client.service';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

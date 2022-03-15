@@ -1,14 +1,15 @@
 model User {
-  id          String         @id @default(uuid())
-  username    String?        @unique
-  password    String?
-  firstName   String
-  lastName    String
-  email       String         @unique
-  isActive    ClientIsActive
-  lang        Lang           @default(EN)
-  accountType AccountType    @default(CLIENT)
-  userDetails UserDetails?
+  id            String         @id @default(uuid())
+  username      String?        @unique
+  password      String?
+  firstName     String
+  lastName      String
+  email         String         @unique
+  isActive      ClientIsActive
+  lang          Lang           @default(EN)
+  accountType   AccountType    @default(CLIENT)
+  userDetails   UserDetails?
+  refreshTokens RefreshToken[]
 
   @@map("users")
 }
@@ -37,6 +38,17 @@ model UserAddress {
   userDetails   UserDetails @relation(fields: [userDetailsId], references: [id])
 
   @@map("users_addresses")
+}
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  ipAddress String
+  createdAt DateTime @default(now())
+  token     String
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@map("refresh_tokens")
 }
 
 enum AccountType {
