@@ -67,6 +67,7 @@ export class AuthController {
     return ResponseHandler<string>(HttpStatus.OK, 'Session has been removed');
   }
 
+  @UseGuards(AccountTypeGuard())
   @Get('/refresh')
   async refreshAccessToken(@Req() req: any, @Res() res: any): Promise<IResponseHandler<string>> {
     if(!req.cookies['refresh_token']) throw new HttpException('Please sign in to continue', HttpStatus.UNAUTHORIZED);
@@ -78,6 +79,15 @@ export class AuthController {
       httpOnly: true,
     })
     return res.send(ResponseHandler<string>(HttpStatus.NO_CONTENT, 'Generated new access token'));
+  }
+
+  @UseGuards(AccountTypeGuard())
+  @Get('/authorize')
+  async isUserAuthorizated(@Req() req: any): Promise<IResponseHandler<IAuthorizatedUser>> {
+    if(!req.user) {
+      throw new HttpException('Please sign in to continue', HttpStatus.UNAUTHORIZED);
+    }
+    return ResponseHandler<IAuthorizatedUser>(HttpStatus.OK, req.user);
   }
 
 }
