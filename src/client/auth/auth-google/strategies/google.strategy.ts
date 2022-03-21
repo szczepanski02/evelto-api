@@ -2,6 +2,7 @@ import { Strategy, VerifyCallback } from 'passport-google-oauth20';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { config } from 'dotenv';
+
 config();
 
 @Injectable()
@@ -10,7 +11,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     super({
       clientID: process.env.GOOGLE_AUTH_CLIENT_ID,
       clientSecret: process.env.GOOGLE_AUTH_CLIENT_SECRET,
-      callbackURL: `https://evelto-api.herokuapp.com/client/auth/auth-google/redirect`,
+      callbackURL: `${process.env.GOOGLE_AUTH_REDIRECT_URL}`,
       scope: ['email', 'profile']
     });
   }
