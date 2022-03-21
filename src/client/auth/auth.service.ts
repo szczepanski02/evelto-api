@@ -114,6 +114,9 @@ export class AuthService {
       propertyValue: userLoginDataDto.email
     }
     const user = await this.userService.findByUniqueProperty(findByPayload);
+    if(!(user.password)) {
+      throw new HttpException('This email has been used by other authorization strategy', HttpStatus.UNAUTHORIZED);
+    }
     if(user && (await bcrypt.compare(userLoginDataDto.password, user.password))) {
       return user;
     }
