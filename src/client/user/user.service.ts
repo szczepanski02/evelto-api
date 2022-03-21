@@ -1,7 +1,9 @@
+import { PrismaErrorHandler } from './../../prisma-client/PrismaErrorHandler';
 import { User } from './../../../node_modules/.prisma/client/index.d';
 import { GetUniquePropertyDto } from './dtos/get.unique-property.dto';
 import { PrismaClientService } from '../../prisma-client/prisma-client.service';
 import { Injectable } from '@nestjs/common';
+import { IUserSelect, IUserInclude } from './user.select-schema';
 
 @Injectable()
 export class UserService {
@@ -20,4 +22,17 @@ export class UserService {
     }
   }
 
+  async findByUniquePropertyWithRelations(
+    getUniquePropertyDto: GetUniquePropertyDto,
+    select: IUserSelect
+  ): Promise<User> {
+    try {
+      return await this.prismaClientService.user.findUnique({
+        where: { [getUniquePropertyDto.propertyName]: getUniquePropertyDto.propertyValue },
+        select
+      });
+    } catch (error) {
+      PrismaErrorHandler(error);
+    }
+  }
 }

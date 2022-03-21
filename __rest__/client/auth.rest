@@ -28,4 +28,10 @@ content-type: application/json
 }
 
 ###
-DELETE http://localhost:3000/client/auth/refreshToken/22 HTTP/1.1
+DELETE http://localhost:3000/client/auth/refreshToken/86 HTTP/1.1
+
+
+
+// GOOGLE STRATEGY
+###
+GET http://localhost:3000/client/auth/auth-google HTTP/1.1

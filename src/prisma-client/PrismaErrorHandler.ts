@@ -32,7 +32,7 @@ export const PrismaErrorHandler = (error: IPrismaError) => {
 
   // else
   throw new HttpException(
-    'Failed at creating new employee, please contact with IT Support',
+    'Some problem with request, please contact with support',
     HttpStatus.INTERNAL_SERVER_ERROR
   )
 }

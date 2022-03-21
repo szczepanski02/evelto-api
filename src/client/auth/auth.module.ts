@@ -23,6 +23,6 @@ import { ClientLocalStrategy } from './stategies/client-local.strategy';
     AuthController,
   ],
   providers: [AuthService, ClientJwtService, ClientJwtAuthStrategy, ClientLocalStrategy],
-  exports: [AuthService]
+  exports: [AuthService, ClientJwtService]
 })
 export class AuthModule {}

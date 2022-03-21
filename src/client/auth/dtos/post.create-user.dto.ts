@@ -34,7 +34,7 @@ export class PostCreateUserDto {
   // details
   profileImg?: string;
 
-  age?: number;
+  birthDate?: Date;
 
   gender?: Gender;
 

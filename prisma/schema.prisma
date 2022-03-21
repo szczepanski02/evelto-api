@@ -53,17 +53,19 @@ model VerificatedIP {
 }
 
 model User {
-  id            String         @id @default(uuid())
-  username      String?        @unique
-  password      String?
-  firstName     String
-  lastName      String
-  email         String         @unique
-  isActive      ClientIsActive
-  lang          Lang           @default(EN)
-  accountType   AccountType    @default(CLIENT)
-  userDetails   UserDetails?   @relation(name: "UserToUserDetails")
-  refreshTokens RefreshToken[] @relation(name: "RefreshTokenToUser")
+  id             String              @id @default(uuid())
+  username       String?             @unique
+  password       String?
+  firstName      String
+  lastName       String
+  email          String              @unique
+  isActive       ClientIsActive
+  createdBy      CreatedByStrategies @default(LOCAL)
+  lang           Lang                @default(EN)
+  accountType    AccountType         @default(CLIENT)
+  userDetails    UserDetails?        @relation(name: "UserToUserDetails")
+  refreshTokens  RefreshToken[]      @relation(name: "RefreshTokenToUser")
+  creatorDetails CreatorDetails?     @relation(name: "CreatorDetailsToUser")
 
   @@map("users")
 }
@@ -72,7 +74,7 @@ model UserDetails {
   id          Int          @id @default(autoincrement())
   userId      String       @unique
   profileImg  String?
-  age         Int?
+  birthDate   DateTime?
   gender      Gender       @default(OTHER)
   createdAt   DateTime     @default(now())
   user        User         @relation(name: "UserToUserDetails", fields: [userId], references: [id])
@@ -92,6 +94,15 @@ model UserAddress {
   userDetails   UserDetails @relation(name: "UserAddressToUserDetails", fields: [userDetailsId], references: [id])
 
   @@map("users_addresses")
+}
+
+model CreatorDetails {
+  id          Int     @id @default(autoincrement())
+  userId      String  @unique
+  user        User    @relation(name: "CreatorDetailsToUser", fields: [userId], references: [id])
+  verificated Boolean @default(false)
+
+  @@map("creator_details")
 }
 
 model RefreshToken {
@@ -135,4 +146,10 @@ enum ClientIsActive {
   BLOCKED
   EMAIL_VERIFICATION
   PROFILE_NOT_COMPLETE
+}
+
+enum CreatedByStrategies {
+  LOCAL
+  FACEBOOk
+  GOOGLE
 }

@@ -24,19 +24,25 @@ export class AuthService {
 
   async signToken(data: IClientJwtPayload, subject: ISubjectRefreshTokenPayload): Promise<UserTokensDto> {
     const { accessToken, refreshToken } = this.clientJwtService.login(data);
-    const userTokenList = await this.clientJwtService.getUserTokensList(subject.userId);
+    await this.addRefreshTokenToDatabase(refreshToken, subject.ipAddress);
+    return { access_token: accessToken, refresh_token: refreshToken };
+  }
+
+  async addRefreshTokenToDatabase(refresh_token: string, ipAddress: string) {
+    const userId = this.clientJwtService.getUserIdFromRefreshToken(refresh_token);
+    const userTokenList = await this.clientJwtService.getUserTokensList(userId);
     if(userTokenList.length > 2) { // max tokens for user is 3
       await this.clientJwtService.removeRefreshTokenById(userTokenList[0].id);
     }
     try {
       await this.prismaClientService.user.update({
-        where: { id: subject.userId },
+        where: { id: userId },
         data: {
           refreshTokens: {
             create: [
               {
-                ipAddress: subject.ipAddress,
-                token: refreshToken
+                ipAddress,
+                token: refresh_token
               }
             ]
           }
@@ -45,26 +51,30 @@ export class AuthService {
     } catch (error) {
       PrismaErrorHandler(error);
     }
-    return { access_token: accessToken, refresh_token: refreshToken };
   }
 
   async userHasRefreshTokenAtLogin(req: any, clientId: string) {
-    if(req.cookies && req.cookies['refresh_token'] && req.cookies['refresh_token'].length > 0) {
-      await this.clientJwtService.removeRefreshTokenByToken(req.cookies['refresh_token'], clientId);
+    if(req.body.refresh_token && req.body.refresh_token.length > 0) {
+      await this.clientJwtService.removeRefreshTokenByToken(req.body.refresh_token, clientId);
     }
   }
 
   // it generate new access token from refresh token IF refresh token exists in user entity
   async generateAccessTokenFromRefreshToken(req: any): Promise<UserTokensDto> {
-    if(req.cookies && req.cookies['refresh_token'] && req.cookies['refresh_token'].length > 0) {
-      const refreshToken = req.cookies['refresh_token'];
+    if(req.body.refresh_token && req.body.refresh_token.length > 0) {
+      const refreshToken = req.body.refresh_token;
       const userId = this.clientJwtService.getUserIdFromRefreshToken(refreshToken);
-      const userWithRefreshTokens = await this.prismaClientService.user.findUnique({
-        where: { id: userId },
-        include: { refreshTokens: true }
-      });
+      let userWithRefreshTokens;
+      try {
+        userWithRefreshTokens = await this.prismaClientService.user.findUnique({
+          where: { id: userId },
+          include: { refreshTokens: true }
+        });
+      } catch (error) {
+        throw new HttpException('no session', HttpStatus.UNAUTHORIZED);
+      }
       if(!userWithRefreshTokens) {
-        throw new HttpException('Session error, please sign in to continue', HttpStatus.UNAUTHORIZED);
+        throw new HttpException('no session', HttpStatus.UNAUTHORIZED);
       }
       const refreshTokenObj = userWithRefreshTokens.refreshTokens.find((el: RefreshToken) => el.token === refreshToken);
       if(refreshTokenObj) {
@@ -73,22 +83,25 @@ export class AuthService {
         } catch (error) {
           return;
         }
-        const ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAdress || req.connection.socket || '0.0.0.0';
+        const ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress || req.connection.socket || '0.0.0.0';
         return await this.signToken({
           id: userWithRefreshTokens.id,
           username: userWithRefreshTokens.username,
           accountType: userWithRefreshTokens.accountType,
           lang: userWithRefreshTokens.lang,
           firstName: userWithRefreshTokens.firstName,
-          lastName: userWithRefreshTokens.lastName
+          lastName: userWithRefreshTokens.lastName,
+          isActive: userWithRefreshTokens.isActive
         }, { ipAddress, userId: userWithRefreshTokens.id })
       }
-      throw new HttpException('Please sign in to continue', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('no session', HttpStatus.UNAUTHORIZED);
     }
   }
 
   async removeRefreshTokenByToken(refreshToken: string, clientId: string): Promise<void> {
-    await this.clientJwtService.removeRefreshTokenByToken(refreshToken, clientId);
+    if(refreshToken.length > 0) {
+      await this.clientJwtService.removeRefreshTokenByToken(refreshToken, clientId);
+    }
   }
 
   async removeRefreshTokenById(id: number): Promise<void> {
@@ -127,7 +140,7 @@ export class AuthService {
           userDetails: {
             create: {
               profileImg: postCreateUserDto.profileImg,
-              age: postCreateUserDto.age,
+              birthDate: postCreateUserDto.birthDate,
               gender: postCreateUserDto.gender,
               createdAt: new Date(),
               userAddress: {

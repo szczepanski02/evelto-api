@@ -1,3 +1,4 @@
+import { ClientIsActive } from '@prisma/client';
 import { Lang, AccountType } from './../../../../node_modules/.prisma/client/index.d';
 import { Request } from 'express';
 export interface IAuthorizatedUser extends Request {
@@ -8,5 +9,6 @@ export interface IAuthorizatedUser extends Request {
     lastName: string;
     lang: Lang;
     accountType: AccountType;
+    isActive: ClientIsActive;
   }
 }

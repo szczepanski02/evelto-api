@@ -1,0 +1,5 @@
+@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJyc3pjemVwYW5za2kiLCJmaXJzdE5hbWUiOiJSYWRvc8WCYXciLCJsYXN0TmFtZSI6IlN6Y3plcGHFhHNraSIsImF1dGhvcml0eSI6Ik1PREVSQVRPUiIsImlhdCI6MTY0NzAzMzEwNSwiZXhwIjoxNjQ3MDM0MDA1fQ.5J5n2shGNY33DrEQscgxqYurBZYIC3bdUxW6www6mB4
+
+// AUTH controller
+GET http://localhost:3000/client/user/d8fd2ce4-8967-46bb-ab71-df7ef3ed44eb HTTP/1.1
+Authorization: Bearer {{access_token}}

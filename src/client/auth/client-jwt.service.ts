@@ -23,8 +23,10 @@ export class ClientJwtService {
       firstName: data.firstName,
       lastName: data.lastName,
       accountType: data.accountType,
-      lang: data.lang
+      lang: data.lang,
+      isActive: data.isActive
     };
+
     const refreshTokenPayload = {
       id: data.id
     }
@@ -51,8 +53,10 @@ export class ClientJwtService {
 
   getUserIdFromRefreshToken(refreshToken: string): string {
     const decoded = this.jwtService.decode(refreshToken) as IClientRefreshJwtPayload;
-    console.log(decoded);
-    return decoded.id;
+    if(decoded) {
+      return decoded.id;
+    }
+    return null;
   }
 
   async removeRefreshTokenById(id: number) {

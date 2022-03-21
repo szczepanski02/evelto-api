@@ -1,3 +1,6 @@
+import { ClientIsActive } from '@prisma/client';
+import { getClientId } from './../shared/helpers/getClientId';
+import { UserTokensDto } from './dtos/user-tokens.dto';
 import { IAuthorizatedUser } from './../shared/interfaces/IAuthorizatedUser';
 import { AccountTypeGuard } from './../shared/guards/authorities.guard';
 import { IdValidator } from './../../helpers/idValidator';
@@ -14,30 +17,31 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('/login')
   @HttpCode(HttpStatus.OK)
-  async login(@Req() req: any, @Res() res: any): Promise<IResponseHandler<string>> {
-    const ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAdress || req.connection.socket || '0.0.0.0';
+  async login(@Req() req: any, @Res() res: any): Promise<IResponseHandler<UserTokensDto>> {
     const responseObject = await this.authService.signToken({
       id: req.user.id,
       username: req.user.username,
       firstName: req.user.firstName,
       lastName: req.user.lastName,
       lang: req.user.lang,
-      accountType: req.user.accountType
-    }, { userId: req.user.id, ipAddress }
+      accountType: req.user.accountType,
+      isActive: req.user.isActive
+    }, { userId: req.user.id, ipAddress: getClientId(req) }
     );
     if(!responseObject) {
       throw new HttpException('Cannot sign in, please contact with administrator', HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    
+    if(req.user.isActive === ClientIsActive.BLOCKED) {
+      throw new HttpException('Your account has been blocked', HttpStatus.UNAUTHORIZED);
+    }
+
+    if(req.user.isActive === ClientIsActive.EMAIL_VERIFICATION) {
+      throw new HttpException('Please, verify your email to sign in', HttpStatus.UNAUTHORIZED);
+    }
 
     await this.authService.userHasRefreshTokenAtLogin(req, req.user.id);
-    
-    res.cookie('access_token', responseObject.access_token, {
-      httpOnly: true,
-    })
-    res.cookie('refresh_token', responseObject.refresh_token, {
-      httpOnly: true,
-    })
-    return res.send(ResponseHandler<string>(HttpStatus.OK, 'Sign in successfully'));
+    return res.send(ResponseHandler<UserTokensDto>(HttpStatus.OK, { access_token: responseObject.access_token, refresh_token: responseObject.refresh_token, accountType: req.user.accountType }));
   }
 
   @Post('/register')
@@ -49,17 +53,13 @@ export class AuthController {
   }
 
   @UseGuards(AccountTypeGuard())
-  @Get('/logout')
+  @Post('/logout')
   async logout(@Req() req: IAuthorizatedUser): Promise<IResponseHandler<string>> {
-    await this.authService.removeRefreshTokenByToken(req.cookies['refresh_token'], req.user.id);
-    req.res.setHeader('Set-Cookie', [
-      'access_token=; HttpOnly; Path=/; Max-Age=0',
-      'refresh_token=; HttpOnly; Path=/; Max-Age=0'
-    ]);
-    return ResponseHandler<string>(HttpStatus.UNAUTHORIZED, 'Logged out');
+    await this.authService.removeRefreshTokenByToken(req.body.refresh_token, req.user.id);
+    return ResponseHandler<string>(HttpStatus.OK, 'Logged out');
   }
 
-  @UseGuards(AccountTypeGuard())
+  // @UseGuards(AccountTypeGuard())
   @Delete('/refreshToken/:id')
   async removeRefreshToken(@Param('id') id: string): Promise<IResponseHandler<string>> {
     IdValidator(+id);
@@ -67,18 +67,12 @@ export class AuthController {
     return ResponseHandler<string>(HttpStatus.OK, 'Session has been removed');
   }
 
-  @UseGuards(AccountTypeGuard())
-  @Get('/refresh')
-  async refreshAccessToken(@Req() req: any, @Res() res: any): Promise<IResponseHandler<string>> {
-    if(!req.cookies['refresh_token']) throw new HttpException('Please sign in to continue', HttpStatus.UNAUTHORIZED);
+  // @UseGuards(AccountTypeGuard())
+  @Post('/refresh')
+  async refreshAccessToken(@Req() req: any): Promise<IResponseHandler<UserTokensDto>> {
+    if(!req.body.refresh_token) throw new HttpException('no session', HttpStatus.UNAUTHORIZED);
     const responseObject = await this.authService.generateAccessTokenFromRefreshToken(req);
-    res.cookie('access_token', responseObject.access_token, {
-      httpOnly: true,
-    })
-    res.cookie('refresh_token', responseObject.refresh_token, {
-      httpOnly: true,
-    })
-    return res.send(ResponseHandler<string>(HttpStatus.NO_CONTENT, 'Generated new access token'));
+    return ResponseHandler<UserTokensDto>(HttpStatus.OK, { access_token: responseObject.access_token, refresh_token: responseObject.refresh_token });
   }
 
   @UseGuards(AccountTypeGuard())

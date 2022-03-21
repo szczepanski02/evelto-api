@@ -1,5 +1,5 @@
 import { IClientJwtPayload } from '../../shared/interfaces/IClientJwtPayload';
-import { Strategy } from 'passport-jwt';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 
@@ -7,10 +7,7 @@ import { Injectable } from '@nestjs/common';
 export class ClientJwtAuthStrategy extends PassportStrategy(Strategy, 'ClientJwtAuthStrategy') {
   constructor() {
     super({
-      jwtFromRequest: (req: any) => {
-        if (!req || !req.cookies) return null;
-        return req.cookies['access_token'];
-      },
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: process.env.CLIENT_JWT_SECRET_KEY
     });
@@ -23,7 +20,8 @@ export class ClientJwtAuthStrategy extends PassportStrategy(Strategy, 'ClientJwt
       firstName: payload.firstName,
       lastName: payload.lastName,
       accountType: payload.accountType,
-      lang: payload.lang
+      lang: payload.lang,
+      isActive: payload.isActive
     };
   }
 }
