@@ -5,6 +5,8 @@ import { AuthGoogleService } from './auth-google.service';
 import { Request } from 'express';
 import { ClientIsActive } from '@prisma/client';
 import { AuthService } from '../auth.service';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 @Controller('client/auth/auth-google')
 export class AuthGoogleController {
@@ -31,7 +33,7 @@ export class AuthGoogleController {
     }
     await this.authService.userHasRefreshTokenAtLogin(req, responseObject.id);
 
-    return res.redirect(`http://localhost:4200/auth/third-part-auth/redirect?access_token=${responseObject.tokens.access_token}&&refresh_token=${responseObject.tokens.refresh_token}&&accountType=${responseObject.accountType}`);
+    return res.redirect(`${process.env.REDIRECT_WEB_LINK}?access_token=${responseObject.tokens.access_token}&&refresh_token=${responseObject.tokens.refresh_token}&&accountType=${responseObject.accountType}`);
   }
 
 }
