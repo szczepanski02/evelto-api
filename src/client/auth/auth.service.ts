@@ -114,6 +114,9 @@ export class AuthService {
       propertyValue: userLoginDataDto.email
     }
     const user = await this.userService.findByUniqueProperty(findByPayload);
+    if(!user) {
+      throw new HttpException('Invalid email or password', HttpStatus.UNAUTHORIZED);
+    }
     if(!(user.password)) {
       throw new HttpException('This email has been used by other authorization strategy', HttpStatus.UNAUTHORIZED);
     }
