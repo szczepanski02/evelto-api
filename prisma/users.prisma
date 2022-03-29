@@ -7,7 +7,7 @@ model User {
   email          String              @unique
   isActive       ClientIsActive
   createdBy      CreatedByStrategies @default(LOCAL)
-  lang           Lang                @default(EN)
+  lang           Lang                @default(en)
   accountType    AccountType         @default(CLIENT)
   userDetails    UserDetails?
   refreshTokens  RefreshToken[]
@@ -74,8 +74,8 @@ enum Gender {
 }
 
 enum Lang {
-  EN
-  PL
+  en
+  pl
 }
 
 enum ClientIsActive {

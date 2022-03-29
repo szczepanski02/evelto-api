@@ -1,5 +1,5 @@
 import { PrismaErrorHandler } from './../../prisma-client/PrismaErrorHandler';
-import { User } from './../../../node_modules/.prisma/client/index.d';
+import { Lang, User } from './../../../node_modules/.prisma/client/index.d';
 import { GetUniquePropertyDto } from './dtos/get.unique-property.dto';
 import { PrismaClientService } from '../../prisma-client/prisma-client.service';
 import { Injectable } from '@nestjs/common';
@@ -35,4 +35,17 @@ export class UserService {
       PrismaErrorHandler(error);
     }
   }
+
+  // LANG
+  async setLang(id: string, lang: Lang): Promise<User> {
+    try {
+      return await this.prismaClientService.user.update({
+        where: { id },
+        data: { lang }
+      })
+    } catch (error) {
+      PrismaErrorHandler(error);
+    }
+  }
+
 }

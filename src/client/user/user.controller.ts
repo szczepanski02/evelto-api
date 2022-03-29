@@ -1,7 +1,8 @@
+import { PutLangDto } from './dtos/put.lang.dto';
 import { IResponseHandler } from '../../helpers/responseHandler';
 import { User } from '@prisma/client';
 import { ResponseHandler } from './../../helpers/responseHandler';
-import { Controller, Get, HttpStatus, Param } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Param, Post, Body, Put } from '@nestjs/common';
 import { UserService } from './user.service';
 import { userSelectSchemaAll } from './user.select-schema';
 import { UserUniquePropertyEnum } from './dtos/get.unique-property.dto';
@@ -18,6 +19,12 @@ export class UserController {
       userSelectSchemaAll
     );
     return ResponseHandler<User>(HttpStatus.OK, responseObject);
+  }
+
+  @Put('lang/:id')
+  async setLang(@Param('id') id: string, @Body() putLangDto: PutLangDto): Promise<IResponseHandler<string>> {
+    await this.userService.setLang(id, putLangDto.lang);
+    return ResponseHandler<string>(HttpStatus.NO_CONTENT, 'Lang changed');
   }
 
 }

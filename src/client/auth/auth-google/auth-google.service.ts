@@ -60,7 +60,7 @@ export class AuthGoogleService {
           firstName: req.user.firstName,
           lastName: req.user.lastName,
           email: req.user.email,
-          lang: Lang.EN,
+          lang: Lang.en,
           isActive: ClientIsActive.PROFILE_NOT_COMPLETE,
           createdBy: CreatedByStrategies.GOOGLE,
           accountType: AccountType.CREATOR,
