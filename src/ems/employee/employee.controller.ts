@@ -17,16 +17,16 @@ import { IPageableResponse } from '../shared/interfaces/IPageableResponse';
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
 
-  @UseGuards(AuthoritiesGuard([Authority.ROOT]))
+  // @UseGuards(AuthoritiesGuard([Authority.ROOT]))
   @Post()
   async create(
     @Body() createEmployeeDto: CreateEmployeeDto,
     @Req() req: IReqWithEmployeeCredentials
   ): Promise<IResponseHandler<string>> {
     // to change
-    // createEmployeeDto.createdBy = 'SERVER_ROOT';
-    // 
-    createEmployeeDto.createdBy = req.user.username; 
+    createEmployeeDto.createdBy = 'SERVER_ROOT';
+    //
+    // createEmployeeDto.createdBy = req.user.username; 
     const responseObject = await this.employeeService.create(createEmployeeDto);
     if(!responseObject) {
       throw new HttpException(

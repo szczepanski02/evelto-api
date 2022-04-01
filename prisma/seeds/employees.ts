@@ -1,9 +1,10 @@
 import { Authority } from "@prisma/client";
+import * as bcrypt from "bcrypt";
 
 export const initialSeedEmployees = [
   {
     username: 'admin',
-    password: 'admin',
+    password: bcrypt.hashSync('admin', 10),
     firstName: 'Admin',
     lastName: 'Account',
     email: 'admin@domain.com',
@@ -14,7 +15,7 @@ export const initialSeedEmployees = [
   },
   {
     username: 'moderator',
-    password: 'moderator',
+    password: bcrypt.hashSync('moderator', 10),
     firstName: 'Moderator',
     lastName: 'Account',
     email: 'moderator@domain.com',
@@ -25,7 +26,7 @@ export const initialSeedEmployees = [
   },
   {
     username: 'rszczepanski',
-    password: 'admin',
+    password: bcrypt.hashSync('admin', 10),
     firstName: 'Radosław',
     lastName: 'Szczepański',
     email: 'r.szczepanski02@domain.com',

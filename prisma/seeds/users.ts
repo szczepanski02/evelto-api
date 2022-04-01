@@ -1,19 +1,21 @@
 import { CreatedByStrategies, Lang, Gender } from '.prisma/client';
 import { ClientIsActive, AccountType } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
+
 export const initialSeedUsers = [
   {
     username: 'rszczepanski',
-    password: 'rszczepanski',
     firstName: 'Radosław',
     lastName: 'Szczepański',
-    email: 'rszczepanski@domain.com',
+    email: 'r.szczepanski02@gmail.com',
     isActive: ClientIsActive.IS_ACTIVE,
-    createdBy: CreatedByStrategies.LOCAL,
+    createdBy: CreatedByStrategies.GOOGLE,
     lang: Lang.en,
     accountType: AccountType.CREATOR,
     userDetails: {
       create: {
         gender: Gender.MALE,
+        phoneNumber: '+48 733 593 336',
         createdAt: new Date(),
         userAddress: {
           create: {
@@ -33,7 +35,7 @@ export const initialSeedUsers = [
   },
   {
     username: 'jan.kowalski',
-    password: 'kowalski',
+    password: bcrypt.hashSync('kowalski', 10),
     firstName: 'Jan',
     lastName: 'Kowalski',
     email: 'jan.kowalski@domain.com',
@@ -63,7 +65,6 @@ export const initialSeedUsers = [
   },
   {
     username: 'austin001',
-    password: 'kowalski',
     firstName: 'Austin',
     lastName: 'Park',
     email: 'austin.park001@gmail.com',
@@ -75,9 +76,9 @@ export const initialSeedUsers = [
       create: {
         gender: Gender.MALE,
         createdAt: new Date(),
+        phoneNumber: '(469) 536-4663',
         userAddress: {
           create: {
-            phoneNumber: '(469) 536-4663',
             country: 'China',
             city: 'Munster',
             zipCode: '123678',

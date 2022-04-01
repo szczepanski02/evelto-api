@@ -21,6 +21,7 @@ model UserDetails {
   userId      String       @unique
   profileImg  String?
   birthDate   DateTime?
+  phoneNumber String?
   gender      Gender       @default(OTHER)
   createdAt   DateTime     @default(now())
   user        User         @relation(fields: [userId], references: [id])
@@ -32,7 +33,6 @@ model UserDetails {
 model UserAddress {
   id            Int         @id @default(autoincrement())
   userDetailsId Int         @unique
-  phoneNumber   String?
   country       String?
   city          String?
   zipCode       String?
