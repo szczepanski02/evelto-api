@@ -43,7 +43,7 @@ export class PostCreateUserDto {
 
   city?: string;
 
-  zipCode?: number;
+  zipCode?: string;
 
   address1?: string;
 
