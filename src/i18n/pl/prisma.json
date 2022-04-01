@@ -1,0 +1,7 @@
+{
+  "notUniqueProperty": "Wprowdzony {propertyName} został już użyty",
+  "invalidRequest": "Niepoprawne zapytanie, proszę zgłoś ten błąd administracji",
+  "notFound": "Nie znaleziono, proszę zgłoś ten błąd do administracji",
+  "someError": "Wystąpił problem z zapytaniem, proszę skontaktuj się z administracją",
+  "invalidId": "Błędne zapytanie (I102), skontaktuj się z administracją"
+}

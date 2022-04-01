@@ -3,7 +3,7 @@ import { HttpException, HttpStatus } from "@nestjs/common";
 export const PrismaErrorHandler = (error: IPrismaError) => {
   if(error.code === 'P2002') {
     throw new HttpException(
-      `Typed ${error.meta.target} is not unique`,
+      { key: 'prisma.notUniqueProperty', args: { propertyName: error.meta.target }},
       HttpStatus.BAD_REQUEST
     )
   }
@@ -21,18 +21,18 @@ export const PrismaErrorHandler = (error: IPrismaError) => {
     || error.code === 'P2016'
   ) {
     throw new HttpException(
-      'Invalid request, please raport it to IT Support',
+      { key: 'prisma.invalidRequest' },
       HttpStatus.BAD_REQUEST
     )
   }
 
   if(error.code === 'P2025') {
-    throw new HttpException('Not found, please raport it to IT Support', HttpStatus.BAD_REQUEST);
+    throw new HttpException({ key: 'prisma.notFound' }, HttpStatus.BAD_REQUEST);
   }
 
   // else
   throw new HttpException(
-    'Some problem with request, please contact with support',
+    { key: 'prisma.someError' },
     HttpStatus.INTERNAL_SERVER_ERROR
   )
 }

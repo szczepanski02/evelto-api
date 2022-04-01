@@ -21,7 +21,7 @@ export class AuthGoogleService {
   async login(req: IRequestUserFromGoogle): Promise<TokensWithDataDto> {
     const ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '0.0.0.0';
     if(!req.user) {
-      throw new HttpException('Cannot sign in by login, please contact with support', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException({ key: 'auth.cannotSignInGoogle' }, HttpStatus.INTERNAL_SERVER_ERROR);
     }
     const { accessToken, ...data } = req.user;
     const user = await this.userService.findByUniqueProperty(
@@ -29,7 +29,7 @@ export class AuthGoogleService {
     );
     if(user) {
       if(user.createdBy !== CreatedByStrategies.GOOGLE) {
-        throw new HttpException('This email has been already in use', HttpStatus.UNAUTHORIZED);
+        throw new HttpException({ key: 'emailInUseGoogle' }, HttpStatus.UNAUTHORIZED);
       }
       const tokens = await this.authService.signToken({
         id: user.id,
@@ -44,7 +44,7 @@ export class AuthGoogleService {
         ipAddress: ipAddress[0] // to check
       });
       if(!tokens) {
-        throw new HttpException('Cannot sign in by login, please contact with support', HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new HttpException({ key: 'auth.cannotSignInGoogle' }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
       return { tokens, isActive: user.isActive, accountType: user.accountType, id: user.id };
     }
@@ -89,7 +89,7 @@ export class AuthGoogleService {
         ipAddress: ipAddress[0] // to check
       });
       if(!tokens) {
-        throw new HttpException('Cannot sign in by login, please contact with support', HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new HttpException({ key: 'auth.cannotSignInGoogle' }, HttpStatus.INTERNAL_SERVER_ERROR);
       }
       return { tokens, isActive: user.isActive, accountType: user.accountType, id: user.id };
     }

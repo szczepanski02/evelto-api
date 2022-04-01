@@ -1,0 +1,7 @@
+{
+  "notUniqueProperty": "Typed {propertyName} is not unique",
+  "invalidRequest": "Invalid request, please raport it to IT Support",
+  "notFound": "Not found, please raport it to IT Support",
+  "someError": "Some problem with request, please contact with support",
+  "invalidId": "Invalid request (I102), please contact with IT Support"
+}

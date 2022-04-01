@@ -32,9 +32,10 @@ model UserDetails {
 model UserAddress {
   id            Int         @id @default(autoincrement())
   userDetailsId Int         @unique
+  phoneNumber   String?
   country       String?
   city          String?
-  zipCode       Int?
+  zipCode       String?
   address1      String?
   address2      String?
   userDetails   UserDetails @relation(fields: [userDetailsId], references: [id])
@@ -87,6 +88,6 @@ enum ClientIsActive {
 
 enum CreatedByStrategies {
   LOCAL
-  FACEBOOk
+  FACEBOOK
   GOOGLE
 }

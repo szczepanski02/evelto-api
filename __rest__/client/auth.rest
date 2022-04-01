@@ -3,6 +3,7 @@
 // AUTH controller
 POST http://localhost:3000/client/auth/login HTTP/1.1
 content-type: application/json
+x-custom-lang: pl
 
 {
     "email": "r.szczepanski02@gmail.com",
@@ -11,14 +12,15 @@ content-type: application/json
 ###
 POST http://localhost:3000/client/auth/register HTTP/1.1
 content-type: application/json
+x-custom-lang: pl
 
 {
-    "username": "rszczepanski",
+    "username": "rszczepanski2",
     "password": "admin",
     "firstName": "Radosław",
     "lastName": "Szczepański",
-    "email": "r.szczepanski02@gmail.com",
-    "lang": "PL",
+    "email": "r.szczepanski022@gmail.com",
+    "lang": "pl",
     "accountType": "CLIENT",
     "age": 20,
     "gender": "MALE",

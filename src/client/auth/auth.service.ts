@@ -1,5 +1,6 @@
+import { AccountType } from '@prisma/client';
 import { UserTokensDto } from './dtos/user-tokens.dto';
-import { RefreshToken } from './../../../node_modules/.prisma/client/index.d';
+import { RefreshToken, User } from './../../../node_modules/.prisma/client/index.d';
 import { PrismaErrorHandler } from './../../prisma-client/PrismaErrorHandler';
 import { PrismaClientService } from '../../prisma-client/prisma-client.service';
 import { PostCreateUserDto } from './dtos/post.create-user.dto';
@@ -10,7 +11,7 @@ import { UserLoginDataDto } from './dtos/user-login-data.dto';
 import { UserService } from './../user/user.service';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { ClientIsActive, User } from '@prisma/client';
+import { ClientIsActive } from '.prisma/client';
 import { ISubjectRefreshTokenPayload } from '../shared/interfaces/ISubjectRefreshTokenPayload';
 
 @Injectable()
@@ -115,21 +116,30 @@ export class AuthService {
     }
     const user = await this.userService.findByUniqueProperty(findByPayload);
     if(!user) {
-      throw new HttpException('Invalid email or password', HttpStatus.UNAUTHORIZED);
+      throw new HttpException(
+        { key: 'auth.invalidData' },
+        HttpStatus.UNAUTHORIZED
+      );
     }
     if(!(user.password)) {
-      throw new HttpException('This email has been used by other authorization strategy', HttpStatus.UNAUTHORIZED);
+      throw new HttpException(
+        { key: 'auth.invalidStrategy' },
+        HttpStatus.UNAUTHORIZED
+      );
     }
     if(user && (await bcrypt.compare(userLoginDataDto.password, user.password))) {
       return user;
     }
-    throw new HttpException('Invalid email or password', HttpStatus.UNAUTHORIZED);
+    throw new HttpException(
+      { key: 'auth.invalidData' },
+      HttpStatus.UNAUTHORIZED
+    );
   }
 
   async register(postCreateUserDto: PostCreateUserDto): Promise<User> {
     const hashedPassword = await bcrypt.hash(postCreateUserDto.password, 10);
     if(!hashedPassword) throw new HttpException(
-      'Error at creating account, please raport it to support',
+      { key: 'auth.accountCreatingError' },
       HttpStatus.INTERNAL_SERVER_ERROR
     );
     try {
@@ -159,7 +169,14 @@ export class AuthService {
                 }
               }
             }
-          }
+          },
+
+          // create creator details entity in database if user is creator
+          ...postCreateUserDto.accountType === AccountType.CREATOR && { creatorDetails: {
+            create: {
+              verificated: false,
+            }
+          }}
         }
       });
     } catch (error) {

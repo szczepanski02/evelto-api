@@ -3,7 +3,7 @@ import { Lang, User } from './../../../node_modules/.prisma/client/index.d';
 import { GetUniquePropertyDto } from './dtos/get.unique-property.dto';
 import { PrismaClientService } from '../../prisma-client/prisma-client.service';
 import { Injectable } from '@nestjs/common';
-import { IUserSelect, IUserInclude } from './user.select-schema';
+import { IUserSelect } from './user.select-schema';
 
 @Injectable()
 export class UserService {

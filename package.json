@@ -8,13 +8,18 @@
   "engines": {
     "node": "17.3.x"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seeds/seed.ts"
+  },
   "scripts": {
     "prismix": "npx prismix && npx prisma format",
     "prebuild": "rimraf dist && npm run prismix",
     "build": "nest build",
-    "postinstall": "npx prisma generate && npm run build",
+    "postinstall": "npx prisma generate && npx prisma db push && npm run db:reset && npm run build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start:local-db": "docker-compose up",
+    "db:reset": "npx prisma migrate reset --force",
+    "db:seed": "npx prisma db seed",
     "db:live": "npx prisma studio",
     "db:migrate": "npx prismix && npx prisma migrate dev --preview-feature",
     "db:generate": "npx prisma generate",
@@ -44,6 +49,7 @@
     "class-validator": "^0.13.2",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.0",
+    "nestjs-i18n": "^8.3.2",
     "passport": "^0.5.2",
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.0",
