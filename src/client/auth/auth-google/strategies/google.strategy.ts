@@ -12,11 +12,16 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       clientID: process.env.GOOGLE_AUTH_CLIENT_ID,
       clientSecret: process.env.GOOGLE_AUTH_CLIENT_SECRET,
       callbackURL: process.env.GOOGLE_AUTH_REDIRECT_URL,
-      scope: ['email', 'profile']
+      scope: ['email', 'profile'],
     });
   }
 
-  async validate(accessToken: string, refreshToken: string, profile: any, done: VerifyCallback): Promise<any> {
+  async validate(
+    accessToken: string,
+    refreshToken: string,
+    profile: any,
+    done: VerifyCallback,
+  ): Promise<any> {
     try {
       const { name, emails, photos } = profile;
       const user = {
@@ -24,12 +29,11 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         firstName: name.givenName,
         lastName: name.familyName,
         picture: photos[0].value,
-        accessToken
-      }
-      done(null, user)
+        accessToken,
+      };
+      done(null, user);
     } catch {
       return;
     }
   }
-
 }

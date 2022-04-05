@@ -1,7 +1,5 @@
-import { TokensWithDataDto } from './dtos/tokens-with-data.dto';
 import { I18nLang, I18nService } from 'nestjs-i18n';
 import { IRequestUserFromGoogle } from './../../shared/interfaces/IReqUserFromGoogle';
-import { AuthGuard } from '@nestjs/passport';
 import {
   Controller,
   Get,
@@ -16,6 +14,7 @@ import { Request } from 'express';
 import { ClientIsActive } from '@prisma/client';
 import { AuthService } from '../auth.service';
 import * as dotenv from 'dotenv';
+import { AuthGoogle } from '../guards/google-auth.guard';
 dotenv.config();
 
 @Controller('client/auth/auth-google')
@@ -27,11 +26,11 @@ export class AuthGoogleController {
   ) {}
 
   @Get('')
-  @UseGuards(AuthGuard('google'))
+  @UseGuards(AuthGoogle)
   async login(@Req() req: Request) {}
 
   @Get('/redirect')
-  @UseGuards(AuthGuard('google'))
+  @UseGuards(AuthGoogle)
   async googleAuthRedirect(
     @Req() req: IRequestUserFromGoogle,
     @Res() res: any,
@@ -39,7 +38,7 @@ export class AuthGoogleController {
   ) {
     const responseObject = await this.authGoogleService.login(req);
 
-    if (responseObject instanceof TokensWithDataDto) {
+    if (typeof responseObject === 'object') {
       if (responseObject.isActive === ClientIsActive.BLOCKED) {
         throw new HttpException(
           await this.i18n.translate('auth.accountIsBlocked', { lang }),

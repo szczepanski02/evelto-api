@@ -1,9 +1,9 @@
 import * as httpMocks from 'node-mocks-http';
-import { Test, TestingModule } from "@nestjs/testing";
-import { AuthController } from '../auth.controller';
+import { Test, TestingModule } from '@nestjs/testing';
 import { employeesMock } from '../../employee/__tests__/employees.mock';
 import { AuthService } from '../auth.service';
 import { AuthoritiesGuard } from '../../shared/guards/authorities.guard';
+import { AuthController } from '../auth.controller';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -14,24 +14,28 @@ describe('AuthController', () => {
     id: employeesMock[0].id,
     firstName: employeesMock[0].firstName,
     lastName: employeesMock[0].lastName,
-    authority: employeesMock[0].authority
+    authority: employeesMock[0].authority,
   };
 
   const authServiceMock = {
     findById(id: number) {
-      return employeesMock.filter(employee => employee.id === id)[0];
-    }
-  }
+      return employeesMock.filter((employee) => employee.id === id)[0];
+    },
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
       providers: [
         AuthService,
-        { provide: AuthoritiesGuard, useValue: jest.fn().mockImplementation(() => true) }
+        {
+          provide: AuthoritiesGuard,
+          useValue: jest.fn().mockImplementation(() => true),
+        },
       ],
     })
-      .overrideProvider(AuthService).useValue(authServiceMock)
+      .overrideProvider(AuthService)
+      .useValue(authServiceMock)
       .compile();
 
     controller = module.get<AuthController>(AuthController);
