@@ -12,18 +12,23 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('getWithRelations/:id')
-  async getUserWithRelations(@Param('id') id: string): Promise<IResponseHandler<User>> {
-    const responseObject = await this.userService.findByUniquePropertyWithRelations(
-      { propertyName: UserUniquePropertyEnum.id, propertyValue: id },
-      userSelectSchemaAll
-    );
+  async getUserWithRelations(
+    @Param('id') id: string,
+  ): Promise<IResponseHandler<User>> {
+    const responseObject =
+      await this.userService.findByUniquePropertyWithRelations(
+        { propertyName: UserUniquePropertyEnum.id, propertyValue: id },
+        userSelectSchemaAll,
+      );
     return ResponseHandler<User>(HttpStatus.OK, responseObject);
   }
 
   @Put('lang/:id')
-  async setLang(@Param('id') id: string, @Body() putLangDto: PutLangDto): Promise<IResponseHandler<string>> {
+  async setLang(
+    @Param('id') id: string,
+    @Body() putLangDto: PutLangDto,
+  ): Promise<IResponseHandler<string>> {
     await this.userService.setLang(id, putLangDto.lang);
     return ResponseHandler<string>(HttpStatus.NO_CONTENT, 'Lang changed');
   }
-
 }

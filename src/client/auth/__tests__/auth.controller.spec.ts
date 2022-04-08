@@ -7,7 +7,6 @@ import * as httpMocks from 'node-mocks-http';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from '../auth.controller';
 import { AuthService } from '../auth.service';
-import { HttpStatus } from '@nestjs/common';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -68,12 +67,4 @@ describe('AuthController', () => {
   it('should be controller defined', () => {
     expect(controller).toBeDefined();
   });
-
-  // describe('Sign in by email and password', () => {
-  //   it('should return tokens', async () => {
-  //     expect(await controller.login(mockRequest, mockResponse, 'EN')).toEqual(
-  //       ResponseHandler(HttpStatus.OK, await authServiceMock.signToken()),
-  //     );
-  //   });
-  // });
 });

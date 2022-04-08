@@ -7,15 +7,17 @@ import { IUserSelect } from './user.select-schema';
 
 @Injectable()
 export class UserService {
+  constructor(private readonly prismaClientService: PrismaClientService) {}
 
-  constructor(
-    private readonly prismaClientService: PrismaClientService
-  ) {}
-
-  async findByUniqueProperty(getUniquePropertyDto: GetUniquePropertyDto): Promise<User> {
+  async findByUniqueProperty(
+    getUniquePropertyDto: GetUniquePropertyDto,
+  ): Promise<User | null> {
     try {
       return await this.prismaClientService.user.findUnique({
-        where: { [getUniquePropertyDto.propertyName]: getUniquePropertyDto.propertyValue }
+        where: {
+          [getUniquePropertyDto.propertyName]:
+            getUniquePropertyDto.propertyValue,
+        },
       });
     } catch (error) {
       return null;
@@ -24,12 +26,15 @@ export class UserService {
 
   async findByUniquePropertyWithRelations(
     getUniquePropertyDto: GetUniquePropertyDto,
-    select: IUserSelect
+    select: IUserSelect,
   ): Promise<User> {
     try {
       return await this.prismaClientService.user.findUnique({
-        where: { [getUniquePropertyDto.propertyName]: getUniquePropertyDto.propertyValue },
-        select
+        where: {
+          [getUniquePropertyDto.propertyName]:
+            getUniquePropertyDto.propertyValue,
+        },
+        select,
       });
     } catch (error) {
       PrismaErrorHandler(error);
@@ -41,11 +46,10 @@ export class UserService {
     try {
       return await this.prismaClientService.user.update({
         where: { id },
-        data: { lang }
-      })
+        data: { lang },
+      });
     } catch (error) {
       PrismaErrorHandler(error);
     }
   }
-
 }

@@ -16,30 +16,35 @@ import { pageableResponseObject } from '../shared/others/pageableResponseObject'
 export class EmployeeService {
   constructor(private prismaClientService: PrismaClientService) {}
 
-  async findById(id: number, select?: SelectEmployeeDto): Promise<EmployeeOptionalDto | null> {
+  async findById(
+    id: number,
+    select?: SelectEmployeeDto,
+  ): Promise<EmployeeOptionalDto | null> {
     const employee = await this.prismaClientService.employee.findUnique({
       where: {
-        id: +id
+        id: +id,
       },
-      select
+      select,
     });
-    if(!employee) {
+    if (!employee) {
       return null;
     }
     return employee;
   }
 
-  async getEmployeeWithRelations(id: number): Promise<EmployeeOptionalDto | null> {
+  async getEmployeeWithRelations(
+    id: number,
+  ): Promise<EmployeeOptionalDto | null> {
     const employee = await this.prismaClientService.employee.findUnique({
       where: {
-        id
+        id,
       },
       include: {
         ipRequests: true,
-        verificatedIPs: true
-      }
+        verificatedIPs: true,
+      },
     });
-    if(employee) return employee;
+    if (employee) return employee;
     return null;
   }
 
@@ -47,7 +52,7 @@ export class EmployeeService {
     try {
       return await this.prismaClientService.employee.findUnique({
         where: { username },
-        select: employeeSelectSchemaWithoutPassword
+        select: employeeSelectSchemaWithoutPassword,
       });
     } catch (error) {
       PrismaErrorHandler(error);
@@ -57,10 +62,10 @@ export class EmployeeService {
   async findByUsername(username: string): Promise<Employee | null> {
     const employee = await this.prismaClientService.employee.findUnique({
       where: {
-        username
+        username,
       },
     });
-    if(!employee) {
+    if (!employee) {
       return null;
     }
     return employee;
@@ -76,8 +81,8 @@ export class EmployeeService {
           password: hashedPassword,
           firstName: payload.firstName,
           lastName: payload.lastName,
-          createdBy: payload.createdBy
-        }
+          createdBy: payload.createdBy,
+        },
       });
       return newEmployee;
     } catch (error) {
@@ -85,31 +90,38 @@ export class EmployeeService {
     }
   }
 
-  async findMany(employeePageableDto: IPageable, select?: SelectEmployeeDto): Promise<IPageableResponse<EmployeeOptionalDto[]>> {
+  async findMany(
+    employeePageableDto: IPageable,
+    select?: SelectEmployeeDto,
+  ): Promise<IPageableResponse<EmployeeOptionalDto[]>> {
     try {
       const employees = await this.prismaClientService.employee.findMany({
         where: {
           [employeePageableDto.filterBy]: {
             contains: employeePageableDto.filterValue,
-            ...(employeePageableDto.filterValue && {mode: 'insensitive'})
-          }
+            ...(employeePageableDto.filterValue && { mode: 'insensitive' }),
+          },
         },
         take: +employeePageableDto.itemsPerPage,
-        skip: +employeePageableDto.currentPage * +employeePageableDto.itemsPerPage,
-        select
+        skip:
+          +employeePageableDto.currentPage * +employeePageableDto.itemsPerPage,
+        select,
       });
       const total = await this.prismaClientService.employee.count();
-      return pageableResponseObject<EmployeeOptionalDto[]>(employeePageableDto, total, employees);
+      return pageableResponseObject<EmployeeOptionalDto[]>(
+        employeePageableDto,
+        total,
+        employees,
+      );
     } catch (error) {
       PrismaErrorHandler(error);
     }
-
   }
 
   async deleteOne(id: number): Promise<Employee> {
     try {
       return await this.prismaClientService.employee.delete({
-        where: { id }
+        where: { id },
       });
     } catch (error) {
       PrismaErrorHandler(error);
@@ -126,9 +138,9 @@ export class EmployeeService {
           lastName: payload.lastName,
           email: payload.email,
           isActive: payload.isActive,
-          ipVerification: payload.ipVerification
-        }
-      })
+          ipVerification: payload.ipVerification,
+        },
+      });
     } catch (error) {
       PrismaErrorHandler(error);
     }
@@ -139,12 +151,11 @@ export class EmployeeService {
       return await this.prismaClientService.employee.update({
         where: { id },
         data: {
-          authority: payload.authority
-        }
+          authority: payload.authority,
+        },
       });
     } catch (error) {
       PrismaErrorHandler(error);
     }
   }
-
 }

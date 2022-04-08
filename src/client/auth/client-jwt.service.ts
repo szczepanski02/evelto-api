@@ -9,12 +9,11 @@ import { RefreshToken } from '@prisma/client';
 
 @Injectable()
 export class ClientJwtService {
-
   constructor(
     private readonly jwtService: JwtService,
     private readonly prismaClientService: PrismaClientService,
-    // @Inject(CACHE_MANAGER) private cacheManager: Cache
-  ) {}
+  ) // @Inject(CACHE_MANAGER) private cacheManager: Cache
+  {}
 
   login(data: IClientJwtPayload) {
     const tokenPayload: IClientJwtPayload = {
@@ -24,27 +23,27 @@ export class ClientJwtService {
       lastName: data.lastName,
       accountType: data.accountType,
       lang: data.lang,
-      isActive: data.isActive
+      isActive: data.isActive,
     };
 
     const refreshTokenPayload = {
-      id: data.id
-    }
+      id: data.id,
+    };
     return {
       accessToken: this.jwtService.sign(tokenPayload, {
         secret: process.env.CLIENT_JWT_SECRET_KEY,
-        expiresIn: '15m'
+        expiresIn: '15m',
       }),
       refreshToken: this.jwtService.sign(refreshTokenPayload, {
         secret: process.env.CLIENT_JWT_REFRESH_SECRET_KEY,
-      })
+      }),
     };
   }
 
   async getUserTokensList(userId: string) {
     try {
       return await this.prismaClientService.refreshToken.findMany({
-        where: { userId }
+        where: { userId },
       });
     } catch (error) {
       PrismaErrorHandler(error);
@@ -52,8 +51,10 @@ export class ClientJwtService {
   }
 
   getUserIdFromRefreshToken(refreshToken: string): string {
-    const decoded = this.jwtService.decode(refreshToken) as IClientRefreshJwtPayload;
-    if(decoded) {
+    const decoded = this.jwtService.decode(
+      refreshToken,
+    ) as IClientRefreshJwtPayload;
+    if (decoded) {
       return decoded.id;
     }
     return null;
@@ -62,25 +63,30 @@ export class ClientJwtService {
   async removeRefreshTokenById(id: number) {
     try {
       await this.prismaClientService.refreshToken.delete({
-        where: { id }
+        where: { id },
       });
     } catch (error) {
       PrismaErrorHandler(error);
     }
   }
 
-  async removeRefreshTokenByToken(refreshToken: string, clientId: string): Promise<void> {
+  async removeRefreshTokenByToken(
+    refreshToken: string,
+    clientId: string,
+  ): Promise<void> {
     const user = await this.prismaClientService.user.findUnique({
       where: { id: clientId },
-      include: { refreshTokens: true }
+      include: { refreshTokens: true },
     });
-    if(!user) return null;
-    const refreshTokenObj = user.refreshTokens.filter((el: RefreshToken) => el.token === refreshToken);
-    if(refreshTokenObj[0]) {
+    if (!user) return null;
+    const refreshTokenObj = user.refreshTokens.filter(
+      (el: RefreshToken) => el.token === refreshToken,
+    );
+    if (refreshTokenObj[0]) {
       try {
         await this.prismaClientService.refreshToken.delete({
-          where: { id: refreshTokenObj[0].id }
-        })
+          where: { id: refreshTokenObj[0].id },
+        });
       } catch (error) {
         return null;
       }
@@ -99,5 +105,4 @@ export class ClientJwtService {
   //   }
   //   return false;
   // }
-
 }

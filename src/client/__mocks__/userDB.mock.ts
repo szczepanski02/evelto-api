@@ -8,9 +8,10 @@ export const _userDBMock = [
     firstName: 'Radosław',
     lastName: 'Szczepański',
     email: 'r.szczepanski02@gmail.com',
+    password: null,
     isActive: ClientIsActive.IS_ACTIVE,
     createdBy: CreatedByStrategies.GOOGLE,
-    lang: Lang.en,
+    lang: Lang.pl,
     accountType: AccountType.CREATOR,
     userDetails: {
       create: {
