@@ -12,6 +12,7 @@ export const initialSeedUsers = [
     createdBy: CreatedByStrategies.GOOGLE,
     lang: Lang.en,
     accountType: AccountType.CREATOR,
+    phoneNumber: null,
     userDetails: {
       create: {
         gender: Gender.MALE,
@@ -22,16 +23,16 @@ export const initialSeedUsers = [
             country: 'Poland',
             city: 'Rudawa',
             zipCode: '32-064',
-            address1: 'Krótka 7'
-          }
+            address1: 'Krótka 7',
+          },
         },
       },
     },
     creatorDetails: {
       create: {
-        verificated: true
-      }
-    }
+        verificated: true,
+      },
+    },
   },
   {
     username: 'jan.kowalski',
@@ -52,16 +53,16 @@ export const initialSeedUsers = [
             country: 'Poland',
             city: 'Cracow',
             zipCode: '30-220',
-            address1: 'Wrocławska 22'
-          }
-        }
-      }
+            address1: 'Wrocławska 22',
+          },
+        },
+      },
     },
     creatorDetails: {
       create: {
-        verificated: true
-      }
-    }
+        verificated: true,
+      },
+    },
   },
   {
     username: 'austin001',
@@ -82,15 +83,15 @@ export const initialSeedUsers = [
             country: 'China',
             city: 'Munster',
             zipCode: '123678',
-            address1: 'Pede. St. 976-4803'
-          }
-        }
-      }
+            address1: 'Pede. St. 976-4803',
+          },
+        },
+      },
     },
     creatorDetails: {
       create: {
-        verificated: true
-      }
-    }
-  }
-]
+        verificated: true,
+      },
+    },
+  },
+];

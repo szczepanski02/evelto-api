@@ -1,6 +1,5 @@
 import { I18nLang, I18nService } from 'nestjs-i18n';
 import { ClientIsActive } from '@prisma/client';
-import { getClientId } from './../shared/helpers/getClientId';
 import { UserTokensDto } from './dtos/user-tokens.dto';
 import { IAuthorizatedUser } from './../shared/interfaces/IAuthorizatedUser';
 import { AccountTypeGuard } from './../shared/guards/authorities.guard';
@@ -26,6 +25,7 @@ import {
   Get,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { getClientIp } from '../shared/helpers/getClientIp';
 
 @Controller('client/auth')
 export class AuthController {
@@ -52,7 +52,7 @@ export class AuthController {
         accountType: req.user.accountType,
         isActive: req.user.isActive,
       },
-      { userId: req.user.id, ipAddress: getClientId(req) },
+      { userId: req.user.id, ipAddress: getClientIp(req) },
     );
     if (!responseObject) {
       throw new HttpException(
