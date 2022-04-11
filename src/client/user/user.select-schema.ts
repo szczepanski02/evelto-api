@@ -16,7 +16,8 @@ export const userSelectSchemaAll = {
       birthDate: true,
       gender: true,
       createdAt: true,
-      userAddress: true
+      userAddress: true,
+      phoneNumber: true
     }
   },
   creatorDetails: true

@@ -32,7 +32,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private i18n: I18nService,
-  ) {}
+  ) { }
 
   @UseGuards(LocalAuthGuard)
   @Post('/login')
@@ -115,7 +115,7 @@ export class AuthController {
     );
   }
 
-  // @UseGuards(AccountTypeGuard())
+  @UseGuards(AccountTypeGuard())
   @Delete('/refreshToken/:id')
   async removeRefreshToken(
     @Param('id') id: string,
@@ -129,7 +129,6 @@ export class AuthController {
     );
   }
 
-  // @UseGuards(AccountTypeGuard())
   @Post('/refresh')
   async refreshAccessToken(
     @Req() req: any,

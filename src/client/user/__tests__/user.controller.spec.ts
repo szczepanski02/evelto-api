@@ -13,7 +13,15 @@ describe('UserController', () => {
   let service: UserService;
 
   const mockRequest: any = httpMocks.createRequest();
-  const mockResponse: any = httpMocks.createResponse();
+  mockRequest.user = {
+    id: '1',
+    username: 'j.kowalski',
+    firstName: 'Jan',
+    lastName: 'Kowalski',
+    lang: Lang.pl,
+    email: 'kowalski@domain.com',
+    isActive: ClientIsActive.IS_ACTIVE,
+  };
   mockRequest.user = {
     username: 'test',
     isActive: ClientIsActive.IS_ACTIVE,
@@ -53,7 +61,7 @@ describe('UserController', () => {
         .spyOn(service, 'findByUniquePropertyWithRelations')
         .mockImplementation(async () => result);
 
-      expect(await controller.getUserWithRelations('someId')).toEqual(
+      expect(await controller.getUserWithRelations(mockRequest)).toEqual(
         ResponseHandler(HttpStatus.OK, result),
       );
     });
@@ -67,14 +75,14 @@ describe('UserController', () => {
         .spyOn(service, 'findByUniquePropertyWithRelations')
         .mockRejectedValue(exception);
       await expect(
-        controller.getUserWithRelations('invalidId'),
+        controller.getUserWithRelations(mockRequest),
       ).rejects.toThrow(exception);
     });
   });
 
   describe('setLang', () => {
     it('should return success message after lang changed', async () => {
-      expect(await controller.setLang('someId', { lang: Lang.en })).toEqual(
+      expect(await controller.setLang({ lang: Lang.en }, mockRequest)).toEqual(
         ResponseHandler(HttpStatus.NO_CONTENT, 'Lang changed'),
       );
     });

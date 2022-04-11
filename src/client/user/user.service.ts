@@ -1,3 +1,4 @@
+import { PutUserDto } from './dtos/put.user.dto';
 import { PrismaErrorHandler } from './../../prisma-client/PrismaErrorHandler';
 import { Lang, User } from './../../../node_modules/.prisma/client/index.d';
 import { GetUniquePropertyDto } from './dtos/get.unique-property.dto';
@@ -7,7 +8,7 @@ import { IUserSelect } from './user.select-schema';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prismaClientService: PrismaClientService) {}
+  constructor(private readonly prismaClientService: PrismaClientService) { }
 
   async findByUniqueProperty(
     getUniquePropertyDto: GetUniquePropertyDto,
@@ -47,6 +48,37 @@ export class UserService {
       return await this.prismaClientService.user.update({
         where: { id },
         data: { lang },
+      });
+    } catch (error) {
+      PrismaErrorHandler(error);
+    }
+  }
+
+  async userUpdate(putUserDto: PutUserDto, id: string): Promise<User> {
+    try {
+      return await this.prismaClientService.user.update({
+        where: { id },
+        data: {
+          username: putUserDto.username,
+          email: putUserDto.email,
+          userDetails: {
+            update: {
+              birthDate: putUserDto.birthDate,
+              gender: putUserDto.gender,
+              phoneNumber: putUserDto.phoneNumber,
+              profileImg: putUserDto.profileImg,
+              userAddress: {
+                update: {
+                  country: putUserDto.country,
+                  city: putUserDto.city,
+                  zipCode: putUserDto.zipCode,
+                  address1: putUserDto.address1,
+                  address2: putUserDto.address2,
+                },
+              },
+            },
+          },
+        },
       });
     } catch (error) {
       PrismaErrorHandler(error);

@@ -45,7 +45,6 @@ export class AuthService {
       // max tokens for user is 3
       await this.clientJwtService.removeRefreshTokenById(userTokenList[0].id);
     }
-    console.log('IP', ipAddress);
     try {
       await this.prismaClientService.user.update({
         where: { id: userId },

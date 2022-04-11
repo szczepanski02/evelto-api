@@ -34,7 +34,6 @@ export const PrismaErrorHandler = (error: IPrismaError) => {
   }
 
   // else
-  console.log(error);
   throw new HttpException(
     { key: 'prisma.someError' },
     HttpStatus.INTERNAL_SERVER_ERROR,
